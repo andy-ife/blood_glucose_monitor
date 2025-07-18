@@ -1,4 +1,5 @@
 import 'package:blood_glucose_monitor/theme/colors.dart';
+import 'package:blood_glucose_monitor/theme/styles.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -18,13 +19,13 @@ class AppTheme {
     textTheme: TextTheme(
       displaySmall: TextStyle(
         fontFamily: 'Montserrat',
-        fontSize: 18.0,
+        fontSize: 20.0,
         fontWeight: FontWeight.w600,
         color: AppColors.white,
       ),
       displayLarge: TextStyle(
         fontFamily: 'Montserrat',
-        fontSize: 24.0,
+        fontSize: 28.0,
         color: AppColors.white,
       ),
 
@@ -57,5 +58,7 @@ class AppTheme {
         fontSize: 11.0,
       ),
     ),
+
+    textButtonTheme: TextButtonThemeData(style: AppButtonStylesLight.filled),
   );
 }

@@ -13,8 +13,8 @@ class AppButtonStylesLight {
   );
 
   static final text = TextButton.styleFrom(
-    backgroundColor: AppColors.white,
-    foregroundColor: AppColors.black,
+    backgroundColor: Colors.transparent,
+    foregroundColor: AppColors.primary,
     textStyle: TextStyle(
       fontFamily: "IBM Plex Sans",
       fontWeight: FontWeight.w600,

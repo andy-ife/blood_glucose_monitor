@@ -1,3 +1,4 @@
+import 'package:blood_glucose_monitor/pages/onboarding.dart';
 import 'package:blood_glucose_monitor/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light,
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
-      home: Placeholder(),
+      home: OnboardingPage(),
     );
   }
 }
