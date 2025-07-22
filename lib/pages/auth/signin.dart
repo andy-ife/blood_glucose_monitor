@@ -1,3 +1,4 @@
+import 'package:blood_glucose_monitor/pages/home/home.dart';
 import 'package:flutter/material.dart';
 
 class SignInForm extends StatefulWidget {
@@ -107,7 +108,12 @@ class _SignInFormState extends State<SignInForm> {
                     width: double.infinity,
                     child: TextButton(
                       onPressed: () {
-                        _formKey.currentState!.validate();
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (_) => HomePage()),
+                            (route) => false,
+                          );
+                        }
                       },
                       child: const Text('Continue'),
                     ),
