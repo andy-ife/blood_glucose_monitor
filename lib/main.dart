@@ -14,8 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Blood Glucose Monitor',
       theme: AppTheme.light,
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       home: OnboardingPage(),
     );
   }

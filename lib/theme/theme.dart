@@ -35,7 +35,18 @@ class AppTheme {
         color: AppColors.white,
       ),
 
-      titleMedium: TextStyle(fontFamily: 'IBM Plex Sans', fontSize: 16.0),
+      headlineSmall: TextStyle(
+        fontFamily: 'IBM Plex Sans',
+        fontSize: 22.0,
+        color: AppColors.primary,
+        fontWeight: FontWeight.w600,
+      ),
+
+      titleMedium: TextStyle(
+        fontFamily: 'IBM Plex Sans',
+        fontSize: 16.0,
+        fontWeight: FontWeight.w600,
+      ),
       titleLarge: TextStyle(
         fontFamily: 'IBM Plex Sans',
         fontSize: 20.0,
@@ -43,11 +54,8 @@ class AppTheme {
       ),
 
       bodyMedium: TextStyle(fontFamily: 'IBM Plex Sans', fontSize: 14.0),
-      bodyLarge: TextStyle(
-        fontFamily: 'IBM Plex Sans',
-        fontSize: 16.0,
-        fontWeight: FontWeight.w600,
-      ),
+      bodyLarge: TextStyle(fontFamily: 'IBM Plex Sans', fontSize: 16.0),
+      bodySmall: TextStyle(fontFamily: 'IBM Plex Sans', fontSize: 12.0),
 
       labelMedium: TextStyle(fontFamily: 'IBM Plex Sans', fontSize: 12.0),
 
