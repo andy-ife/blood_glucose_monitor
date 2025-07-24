@@ -5,13 +5,6 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'History',
-        style: Theme.of(
-          context,
-        ).textTheme.displayLarge!.copyWith(color: Colors.green),
-      ),
-    );
+    return Scaffold();
   }
 }

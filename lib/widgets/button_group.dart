@@ -48,12 +48,25 @@ class _BGMButtonGroupState extends State<BGMButtonGroup> {
                 onPressed: () {
                   setState(() {
                     _selected.remove(curr);
+                    print(_selected);
+                    if (_selected.isEmpty) {
+                      _selected.add(
+                        widget.initialSelection?.first ?? widget.values.first,
+                      );
+                    }
                   });
 
                   widget.onSelectionChange(_selected);
                 },
                 style: !widget.floating
-                    ? AppButtonStylesLight.filled
+                    ? AppButtonStylesLight.filled.copyWith(
+                        textStyle: WidgetStateProperty.all(
+                          theme.textTheme.titleMedium!.copyWith(
+                            inherit: true,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      )
                     : AppButtonStylesLight.floating.copyWith(
                         backgroundColor: WidgetStateProperty.all(
                           theme.colorScheme.primary,
@@ -83,9 +96,12 @@ class _BGMButtonGroupState extends State<BGMButtonGroup> {
                     _selected.clear();
                     _selected.add(curr);
                   });
+                  widget.onSelectionChange(_selected);
                 }
               },
-              style: !widget.floating ? null : AppButtonStylesLight.floating,
+              style: !widget.floating
+                  ? AppButtonStylesLight.text
+                  : AppButtonStylesLight.floating,
               child: Text(curr),
             );
           },

@@ -1,3 +1,4 @@
+import 'package:blood_glucose_monitor/pages/home/tests.dart';
 import 'package:blood_glucose_monitor/theme/colors.dart';
 import 'package:blood_glucose_monitor/widgets/gradient_background.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -103,7 +104,7 @@ class DashboardPage extends StatelessWidget {
                             children: [
                               Text(
                                 'Current Test',
-                                style: theme.textTheme.titleSmall!.copyWith(
+                                style: theme.textTheme.titleMedium!.copyWith(
                                   color: theme.colorScheme.onPrimary,
                                 ),
                               ),
@@ -111,8 +112,8 @@ class DashboardPage extends StatelessWidget {
                                 TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: 'Today ',
-                                      style: theme.textTheme.labelMedium!
+                                      text: 'Today  ',
+                                      style: theme.textTheme.bodySmall!
                                           .copyWith(
                                             color: theme.colorScheme.onPrimary,
                                             fontWeight: FontWeight.w400,
@@ -120,7 +121,7 @@ class DashboardPage extends StatelessWidget {
                                     ),
                                     TextSpan(
                                       text: '11:00',
-                                      style: theme.textTheme.titleSmall!
+                                      style: theme.textTheme.titleMedium!
                                           .copyWith(
                                             color: theme.colorScheme.onPrimary,
                                           ),
@@ -227,7 +228,7 @@ class DashboardPage extends StatelessWidget {
                     children: [
                       Text('Your Tests', style: theme.textTheme.titleLarge),
                       InkWell(
-                        onTap: () => print('Tapped'),
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_)=>TestsPage())),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
