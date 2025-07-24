@@ -22,4 +22,6 @@ class AppButtonStylesLight {
     ),
     padding: EdgeInsets.symmetric(horizontal: 24.0),
   );
+
+  static final floating = TextButton.styleFrom();
 }
