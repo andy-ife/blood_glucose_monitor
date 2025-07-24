@@ -14,23 +14,6 @@ class DashboardPage extends StatelessWidget {
     final constraints = MediaQuery.of(context).size;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        foregroundColor: theme.colorScheme.onPrimary,
-        onPressed: () {},
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.chat_bubble_outline),
-            Text(
-              'Chat',
-              style: theme.textTheme.labelMedium!.copyWith(
-                color: theme.colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
       appBar: AppBar(
         toolbarHeight: 112.0,
         leadingWidth: constraints.width * 0.20,
@@ -228,7 +211,10 @@ class DashboardPage extends StatelessWidget {
                     children: [
                       Text('Your Tests', style: theme.textTheme.titleLarge),
                       InkWell(
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_)=>TestsPage())),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => TestsPage()),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(

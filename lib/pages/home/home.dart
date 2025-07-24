@@ -12,11 +12,31 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  final _chatFabIndexes = [0, 1];
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
+      floatingActionButton: _chatFabIndexes.contains(_selectedIndex)
+          ? FloatingActionButton(
+              foregroundColor: theme.colorScheme.onPrimary,
+              onPressed: () {},
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.chat_bubble_outline),
+                  Text(
+                    'Chat',
+                    style: theme.textTheme.labelMedium!.copyWith(
+                      color: theme.colorScheme.onPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : null,
       body: SafeArea(
         top: false,
         child: IndexedStack(
