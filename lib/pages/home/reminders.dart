@@ -28,27 +28,31 @@ class RemindersPage extends StatelessWidget {
       ),
       appBar: AppBar(title: Text('Reminders')),
       body: SingleChildScrollView(
-        child: Column(
-          spacing: 16.0,
-          children: [
-            Text(
-              'Active',
-              style: theme.textTheme.titleMedium!.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            ...List.generate(
-              3,
-              (i) => Card(
-                child: ListTile(
-                  leading: SvgPicture.asset('assets/glucometer.svg'),
-                  trailing: Icon(Icons.delete_outline),
-                  title: Text('Take Blood Test'),
-                  subtitle: Text('Jan 5th  11:00pm'),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 16.0,
+            children: [
+              Text(
+                'Active',
+                style: theme.textTheme.titleMedium!.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-            ),
-          ],
+              ...List.generate(
+                3,
+                (i) => Card(
+                  child: ListTile(
+                    leading: SvgPicture.asset('assets/glucometer.svg'),
+                    trailing: Icon(Icons.delete_outline),
+                    title: Text('Take Blood Test'),
+                    subtitle: Text('Jan 5th  11:00pm'),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

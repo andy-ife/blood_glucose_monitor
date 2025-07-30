@@ -51,7 +51,8 @@ class _BGMButtonGroupState extends State<BGMButtonGroup> {
                     print(_selected);
                     if (_selected.isEmpty) {
                       _selected.add(
-                        widget.initialSelection?.first ?? widget.values.first,
+                        widget.initialSelection?.firstOrNull ??
+                            widget.values.first,
                       );
                     }
                   });

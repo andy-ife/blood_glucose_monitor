@@ -35,18 +35,12 @@ class _HistoryPageState extends State<HistoryPage>
       appBar: AppBar(
         title: const Text('History'),
         bottom: TabBar(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
           controller: _tabController,
           tabs: const [
             Tab(text: 'History'),
             Tab(text: 'Trend'),
           ],
-          indicator: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: theme.colorScheme.primary,
-          ),
-          labelColor: Colors.white,
-          unselectedLabelColor: theme.colorScheme.onSurface,
-          indicatorSize: TabBarIndicatorSize.tab,
         ),
       ),
       body: TabBarView(
@@ -98,7 +92,7 @@ class _HistoryPageState extends State<HistoryPage>
                 Expanded(
                   child: _buildStatCard(
                     context,
-                    title: 'Lowest',
+                    title: 'Low',
                     value: '50',
                     unit: 'mg/dL',
                     status: 'Good',
@@ -110,7 +104,7 @@ class _HistoryPageState extends State<HistoryPage>
                 Expanded(
                   child: _buildStatCard(
                     context,
-                    title: 'Highest',
+                    title: 'High',
                     value: '120',
                     unit: 'mg/dL',
                     status: 'Good',
@@ -307,6 +301,8 @@ class _HistoryPageState extends State<HistoryPage>
           ),
           const SizedBox(height: 8),
           Text.rich(
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             TextSpan(
               children: [
                 TextSpan(
