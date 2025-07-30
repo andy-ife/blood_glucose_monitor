@@ -1,3 +1,4 @@
+import 'package:blood_glucose_monitor/pages/home/chat.dart';
 import 'package:blood_glucose_monitor/pages/home/dashboard.dart';
 import 'package:blood_glucose_monitor/pages/home/history.dart';
 import 'package:blood_glucose_monitor/pages/home/reminders.dart';
@@ -21,7 +22,9 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: _chatFabIndexes.contains(_selectedIndex)
           ? FloatingActionButton(
               foregroundColor: theme.colorScheme.onPrimary,
-              onPressed: () {},
+              onPressed: () => Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => ChatPage())),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -36,7 +39,23 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             )
-          : null,
+          : FloatingActionButton(
+              foregroundColor: theme.colorScheme.onPrimary,
+              onPressed: () {},
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.add),
+                  Text(
+                    'New',
+                    style: theme.textTheme.labelMedium!.copyWith(
+                      color: theme.colorScheme.onPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
       body: SafeArea(
         top: false,
         child: IndexedStack(

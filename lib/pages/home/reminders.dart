@@ -8,24 +8,6 @@ class RemindersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        heroTag: null,
-        foregroundColor: theme.colorScheme.onPrimary,
-        onPressed: () {},
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.add),
-            Text(
-              'New',
-              style: theme.textTheme.labelMedium!.copyWith(
-                color: theme.colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
       appBar: AppBar(title: Text('Reminders')),
       body: SingleChildScrollView(
         child: Padding(
