@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "660620653261",
-    "project_id": "blood-glucose-monitor-fbb73",
-    "storage_bucket": "blood-glucose-monitor-fbb73.firebasestorage.app"
+    "project_number": "628309740177",
+    "project_id": "blood-glucose-monitor-496e3",
+    "storage_bucket": "blood-glucose-monitor-496e3.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:660620653261:android:68b2df6298d7106d0d6f84",
+        "mobilesdk_app_id": "1:628309740177:android:b6885658eda186f0b84d30",
         "android_client_info": {
           "package_name": "com.example.blood_glucose_monitor"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDDZ6sl99NChlKBp6zxkEqZJHmKjCdNtc0"
+          "current_key": "AIzaSyCbGm33GlUKq5ehWzYMNW0lWOOA7heJG1w"
         }
       ],
       "services": {

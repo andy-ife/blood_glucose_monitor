@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDDZ6sl99NChlKBp6zxkEqZJHmKjCdNtc0',
-    appId: '1:660620653261:android:68b2df6298d7106d0d6f84',
-    messagingSenderId: '660620653261',
-    projectId: 'blood-glucose-monitor-fbb73',
-    storageBucket: 'blood-glucose-monitor-fbb73.firebasestorage.app',
+    apiKey: 'AIzaSyCbGm33GlUKq5ehWzYMNW0lWOOA7heJG1w',
+    appId: '1:628309740177:android:b6885658eda186f0b84d30',
+    messagingSenderId: '628309740177',
+    projectId: 'blood-glucose-monitor-496e3',
+    storageBucket: 'blood-glucose-monitor-496e3.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDaqzSnhghlo8FSDFMftltyuUZ7PVv_vvw',
-    appId: '1:660620653261:ios:21290c297bc05a450d6f84',
-    messagingSenderId: '660620653261',
-    projectId: 'blood-glucose-monitor-fbb73',
-    storageBucket: 'blood-glucose-monitor-fbb73.firebasestorage.app',
+    apiKey: 'AIzaSyA5qkeQIj_5wjtAvlgVFGyYp4V_Vq7cG_g',
+    appId: '1:628309740177:ios:fc6874b552365277b84d30',
+    messagingSenderId: '628309740177',
+    projectId: 'blood-glucose-monitor-496e3',
+    storageBucket: 'blood-glucose-monitor-496e3.firebasestorage.app',
     iosBundleId: 'com.example.bloodGlucoseMonitor',
   );
+
 }
