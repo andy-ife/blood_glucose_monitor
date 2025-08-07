@@ -115,7 +115,9 @@ class _SignUpFormState extends State<SignUpForm> {
                         if (_formKey.currentState!.validate()) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => AccountDetailsForm(),
+                              builder: (_) => AccountDetailsForm(
+                                email: _emailController.text.trim(),
+                              ),
                             ),
                           );
                         }

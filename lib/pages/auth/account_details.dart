@@ -1,8 +1,12 @@
+import 'package:blood_glucose_monitor/controllers/auth_controller.dart';
 import 'package:blood_glucose_monitor/pages/home/home.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AccountDetailsForm extends StatefulWidget {
-  const AccountDetailsForm({super.key});
+  const AccountDetailsForm({required this.email, super.key});
+
+  final String email;
 
   @override
   State<AccountDetailsForm> createState() => _AccountDetailsFormState();
@@ -14,6 +18,23 @@ class _AccountDetailsFormState extends State<AccountDetailsForm> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
+  late AuthController _authController;
+  late AuthState _authState;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _authController = Provider.of<AuthController>(context, listen: false);
+    _authController.addListener(() {
+      if (_authState.hasError) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(_authState.message)));
+      }
+    });
+  }
+
   @override
   void dispose() {
     _usernameController.dispose();
@@ -24,6 +45,8 @@ class _AccountDetailsFormState extends State<AccountDetailsForm> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    _authState = context.watch<AuthController>().state;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Account details')),
@@ -136,15 +159,33 @@ class _AccountDetailsFormState extends State<AccountDetailsForm> {
                   child: SizedBox(
                     width: double.infinity,
                     child: TextButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (_) => HomePage()),
-                            (route) => false,
+                          final creds = await _authController.signUp(
+                            email: widget.email,
+                            username: _usernameController.text.trim(),
+                            password: _passwordController.text.trim(),
                           );
+
+                          if (creds != null && context.mounted) {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (_) => HomePage()),
+                              (route) => false,
+                            );
+                          }
                         }
                       },
-                      child: const Text('Continue'),
+                      child: _authState.isLoading
+                          ? SizedBox(
+                              height: 24.0,
+                              width: 24.0,
+                              child: const CircularProgressIndicator(
+                                padding: EdgeInsets.all(4.0),
+                                strokeWidth: 3.0,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text('Continue'),
                     ),
                   ),
                 ),
