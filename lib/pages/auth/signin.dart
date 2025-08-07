@@ -1,5 +1,7 @@
-import 'package:blood_glucose_monitor/pages/home/home.dart';
+import 'package:blood_glucose_monitor/controllers/auth_controller.dart';
+import 'package:blood_glucose_monitor/pages/auth/signup.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
@@ -14,6 +16,22 @@ class _SignInFormState extends State<SignInForm> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
+  late AuthController _authController;
+  late AuthState _authState;
+
+  @override
+  void initState() {
+    super.initState();
+    _authController = Provider.of<AuthController>(context, listen: false);
+    _authController.addListener(() {
+      if (_authState.hasError) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(_authState.message)));
+      }
+    });
+  }
+
   @override
   void dispose() {
     _usernameController.dispose();
@@ -24,6 +42,8 @@ class _SignInFormState extends State<SignInForm> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    _authState = context.watch<AuthController>().state;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Sign in')),
@@ -47,6 +67,7 @@ class _SignInFormState extends State<SignInForm> {
                           ),
                           const SizedBox(height: 24.0),
                           TextFormField(
+                            keyboardType: TextInputType.emailAddress,
                             controller: _usernameController,
                             decoration: const InputDecoration(
                               labelText: 'Email or Username',
@@ -65,6 +86,7 @@ class _SignInFormState extends State<SignInForm> {
                           ),
                           const SizedBox(height: 20),
                           TextFormField(
+                            keyboardType: TextInputType.emailAddress,
                             controller: _passwordController,
                             obscureText: _obscurePassword,
                             decoration: InputDecoration(
@@ -93,6 +115,38 @@ class _SignInFormState extends State<SignInForm> {
                               return null;
                             },
                           ),
+                          const SizedBox(height: 40),
+                          GestureDetector(
+                            onTap: () => Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => SignUpForm()),
+                            ),
+                            child: Center(
+                              child: Text.rich(
+                                textAlign: TextAlign.center,
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Don\'t have an account?\n',
+                                      style: theme.textTheme.bodyMedium!
+                                          .copyWith(
+                                            color: theme
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
+                                    ),
+                                    TextSpan(
+                                      text: 'Sign up',
+                                      style: theme.textTheme.titleSmall!
+                                          .copyWith(
+                                            color: theme.colorScheme.primary,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -107,15 +161,29 @@ class _SignInFormState extends State<SignInForm> {
                   child: SizedBox(
                     width: double.infinity,
                     child: TextButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (_) => HomePage()),
-                            (route) => false,
+                          final creds = await _authController.signIn(
+                            _usernameController.text.trim(),
+                            _passwordController.text.trim(),
                           );
+
+                          if (creds != null && context.mounted) {
+                            Navigator.of(context).pop();
+                          }
                         }
                       },
-                      child: const Text('Continue'),
+                      child: _authState.isLoading
+                          ? SizedBox(
+                              height: 24.0,
+                              width: 24.0,
+                              child: const CircularProgressIndicator(
+                                padding: EdgeInsets.all(4.0),
+                                strokeWidth: 3.0,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text('Continue'),
                     ),
                   ),
                 ),

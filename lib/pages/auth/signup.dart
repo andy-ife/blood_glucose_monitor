@@ -1,4 +1,5 @@
 import 'package:blood_glucose_monitor/pages/auth/account_details.dart';
+import 'package:blood_glucose_monitor/pages/auth/signin.dart';
 import 'package:flutter/material.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -63,6 +64,38 @@ class _SignUpFormState extends State<SignUpForm> {
                               }
                               return null;
                             },
+                          ),
+                          const SizedBox(height: 40),
+                          GestureDetector(
+                            onTap: () => Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => SignInForm()),
+                            ),
+                            child: Center(
+                              child: Text.rich(
+                                textAlign: TextAlign.center,
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Already have an account?\n',
+                                      style: theme.textTheme.bodyMedium!
+                                          .copyWith(
+                                            color: theme
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
+                                    ),
+                                    TextSpan(
+                                      text: 'Sign in',
+                                      style: theme.textTheme.titleSmall!
+                                          .copyWith(
+                                            color: theme.colorScheme.primary,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),

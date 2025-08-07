@@ -1,6 +1,7 @@
 import 'package:blood_glucose_monitor/pages/home/tests.dart';
 import 'package:blood_glucose_monitor/theme/colors.dart';
 import 'package:blood_glucose_monitor/widgets/gradient_background.dart';
+import 'package:blood_glucose_monitor/widgets/profile_settings_dialog.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,12 +20,18 @@ class DashboardPage extends StatelessWidget {
         leadingWidth: constraints.width * 0.20,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16.0),
-          child: CircleAvatar(
-            backgroundColor: theme.colorScheme.surfaceVariant,
-            child: Icon(
-              Icons.account_circle,
-              size: 40.0,
-              color: theme.colorScheme.onSurfaceVariant,
+          child: GestureDetector(
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => Dialog(child: ProfileSettingsDialog()),
+            ),
+            child: CircleAvatar(
+              backgroundColor: theme.colorScheme.surfaceVariant,
+              child: Icon(
+                Icons.account_circle,
+                size: 40.0,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
         ),
