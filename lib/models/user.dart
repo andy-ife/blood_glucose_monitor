@@ -5,7 +5,7 @@ class User {
   final String profilePhoto;
 
   const User({
-    this.id = '123456789',
+    this.id = '000',
     this.email = '',
     this.username = '_glucoseboy',
     this.profilePhoto = '',
