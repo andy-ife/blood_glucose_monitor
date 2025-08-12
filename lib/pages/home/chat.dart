@@ -1,7 +1,32 @@
+import 'package:blood_glucose_monitor/models/message.dart';
+import 'package:blood_glucose_monitor/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:blood_glucose_monitor/controllers/chat_controller.dart';
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
+
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  final TextEditingController _textController = TextEditingController();
+  late ChatController _chatController;
+
+  @override
+  void initState() {
+    super.initState();
+    _chatController = Provider.of<ChatController>(context, listen: false);
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,24 +58,12 @@ class ChatPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Center(
-                      child: Text(
-                        'I am here to serve you.\nWhat would you like to know today?',
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            Expanded(child: _ChatBody()),
             Row(
               children: [
                 Expanded(
                   child: TextField(
+                    controller: _textController,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 24.0),
                       hintText: 'Enter message',
@@ -65,7 +78,13 @@ class ChatPage extends StatelessWidget {
                 SizedBox(width: 8.0),
                 IconButton.filled(
                   padding: EdgeInsets.all(12.0),
-                  onPressed: () {},
+                  onPressed: () {
+                    if (_textController.text.isNotEmpty) {
+                      HapticFeedback.vibrate();
+                      _chatController.sendMessage(_textController.text);
+                      _textController.clear();
+                    }
+                  },
                   icon: Icon(Icons.send_rounded),
                 ),
               ],
@@ -74,5 +93,50 @@ class ChatPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _ChatBody extends StatelessWidget {
+  const _ChatBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = context.watch<ChatController>();
+    final state = controller.state;
+    final constraints = MediaQuery.of(context).size;
+
+    final page = state.isFetchingMessageStream
+        ? Center(child: CircularProgressIndicator())
+        : state.hasErrorFetchingMessageStream
+        ? BGMErrorWidget(
+            errorMessage: 'Error fetching messages.\n Are you online?',
+            onRetry: () => controller.fetchMessageStream(),
+          )
+        : StreamBuilder(
+            stream: state.messageStream,
+            builder: (ctx, snapshot) {
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return Center(
+                  child: Text(
+                    'I am here to serve you.\nWhat would you like to know today?',
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              } else {
+                final messages = snapshot.data!.docs
+                    .map(
+                      (doc) =>
+                          Message.fromJson(doc.data() as Map<String, dynamic>),
+                    )
+                    .toList();
+                return ListView.builder(
+                  itemCount: messages.length,
+                  itemBuilder: (ctx, i) => Text(messages[i].message),
+                );
+              }
+            },
+          );
+
+    return page;
   }
 }

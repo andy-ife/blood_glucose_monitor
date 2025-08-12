@@ -27,4 +27,15 @@ class Message {
       'isRead': isRead,
     };
   }
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      senderId: json['senderId'],
+      senderEmail: json['senderEmail'],
+      receiverId: json['receiverId'],
+      message: json['message'],
+      timestamp: json['timestamp'],
+      isRead: json['isRead'],
+    );
+  }
 }
