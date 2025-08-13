@@ -4,11 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+final DOCTOR_ID = 'jmWzzl6ZgzNA3EA4Gb5ijOwdbT83';
+
 class ChatController extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  ChatState state = ChatState(messageStream: Stream.empty());
+  ChatState state = ChatState(
+    messageStream: Stream.empty(),
+    currentUser: FirebaseAuth.instance.currentUser!,
+  );
 
   ChatController() {
     fetchMessageStream();
@@ -26,14 +31,14 @@ class ChatController extends ChangeNotifier {
 
       final chatRoomId = constructChatRoomId(
         senderId: _auth.currentUser!.uid,
-        receiverId: 'doc_leo',
+        receiverId: DOCTOR_ID,
       );
 
       final stream = _firestore
           .collection('chatRooms')
           .doc(chatRoomId)
           .collection('messages')
-          .orderBy('timestamp', descending: true)
+          .orderBy('timestamp')
           .snapshots();
 
       state = state.copyWith(
@@ -59,7 +64,7 @@ class ChatController extends ChangeNotifier {
       final newMessage = Message(
         senderId: _auth.currentUser!.uid,
         senderEmail: _auth.currentUser!.email!,
-        receiverId: 'doc_leo', // patients can only chat with Doc Leo
+        receiverId: DOCTOR_ID, // patients can only chat with Doc Leo
         message: message,
         timestamp: Timestamp.now(),
         isRead: false,
@@ -70,7 +75,7 @@ class ChatController extends ChangeNotifier {
 
       final chatRoomId = constructChatRoomId(
         senderId: _auth.currentUser!.uid,
-        receiverId: 'doc_leo',
+        receiverId: DOCTOR_ID,
       );
 
       await _firestore
@@ -99,6 +104,7 @@ class ChatController extends ChangeNotifier {
 }
 
 class ChatState {
+  final User currentUser;
   final Stream<QuerySnapshot> messageStream;
   final bool hasErrorSendingMessage;
   final bool isSending;
@@ -109,6 +115,7 @@ class ChatState {
 
   const ChatState({
     required this.messageStream,
+    required this.currentUser,
     this.hasErrorSendingMessage = false,
     this.isSending = false,
     this.hasErrorFetchingMessageStream = false,
@@ -118,6 +125,7 @@ class ChatState {
   });
 
   ChatState copyWith({
+    User? currentUser,
     Stream<QuerySnapshot>? messageStream,
     bool? hasErrorSendingMessage,
     bool? isSending,
@@ -127,6 +135,7 @@ class ChatState {
     bool? hasNewMessage,
   }) {
     return ChatState(
+      currentUser: currentUser ?? this.currentUser,
       messageStream: messageStream ?? this.messageStream,
       hasErrorSendingMessage:
           hasErrorSendingMessage ?? this.hasErrorSendingMessage,

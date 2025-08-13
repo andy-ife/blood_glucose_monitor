@@ -1,4 +1,5 @@
 import 'package:blood_glucose_monitor/models/message.dart';
+import 'package:blood_glucose_monitor/utils/helpers.dart';
 import 'package:blood_glucose_monitor/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -103,6 +104,7 @@ class _ChatBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = context.watch<ChatController>();
     final state = controller.state;
+    final theme = Theme.of(context);
     final constraints = MediaQuery.of(context).size;
 
     final page = state.isFetchingMessageStream
@@ -115,7 +117,10 @@ class _ChatBody extends StatelessWidget {
         : StreamBuilder(
             stream: state.messageStream,
             builder: (ctx, snapshot) {
-              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox.shrink();
+              }
+              if (snapshot.data!.docs.isEmpty) {
                 return Center(
                   child: Text(
                     'I am here to serve you.\nWhat would you like to know today?',
@@ -129,9 +134,62 @@ class _ChatBody extends StatelessWidget {
                           Message.fromJson(doc.data() as Map<String, dynamic>),
                     )
                     .toList();
-                return ListView.builder(
+                return ListView.separated(
+                  separatorBuilder: (_, __) => SizedBox(height: 4.0),
                   itemCount: messages.length,
-                  itemBuilder: (ctx, i) => Text(messages[i].message),
+                  itemBuilder: (ctx, i) {
+                    final content = messages[i].message;
+                    final timeString = timestampToString(messages[i].timestamp);
+                    final isCurrUser =
+                        state.currentUser.uid == messages[i].senderId;
+
+                    return Align(
+                      alignment: isCurrUser
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: constraints.width * 0.7,
+                        ),
+                        child: IntrinsicWidth(
+                          child: Card(
+                            elevation: 0.0,
+                            color: isCurrUser
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.surface,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Wrap(
+                                alignment: WrapAlignment.end,
+                                runSpacing: 8.0,
+                                children: [
+                                  Text(
+                                    content,
+                                    style: isCurrUser
+                                        ? theme.textTheme.titleMedium!.copyWith(
+                                            color: Colors.white,
+                                          )
+                                        : theme.textTheme.titleMedium,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      timeString,
+                                      style: isCurrUser
+                                          ? theme.textTheme.bodySmall!.copyWith(
+                                              color: Color(0xfff0f0f0),
+                                            )
+                                          : theme.textTheme.bodySmall,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 );
               }
             },
