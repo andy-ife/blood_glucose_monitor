@@ -3,6 +3,7 @@ import 'package:blood_glucose_monitor/pages/home/chat.dart';
 import 'package:blood_glucose_monitor/pages/home/dashboard.dart';
 import 'package:blood_glucose_monitor/pages/home/history.dart';
 import 'package:blood_glucose_monitor/pages/home/reminders.dart';
+import 'package:blood_glucose_monitor/widgets/add_reminder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -48,7 +49,11 @@ class _HomePageState extends State<HomePage> {
             )
           : FloatingActionButton(
               foregroundColor: theme.colorScheme.onPrimary,
-              onPressed: () {},
+              onPressed: () => showDialog(
+                context: context,
+                builder: (ctx) =>
+                    AddReminderDialog(onContinue: (description, time) {}),
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
