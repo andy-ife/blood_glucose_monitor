@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:blood_glucose_monitor/models/message.dart';
 import 'package:blood_glucose_monitor/utils/helpers.dart';
 import 'package:blood_glucose_monitor/widgets/error_widget.dart';
@@ -15,18 +17,50 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _textController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   late ChatController _chatController;
+
+  Timer? _lastMsgTimer;
 
   @override
   void initState() {
     super.initState();
     _chatController = Provider.of<ChatController>(context, listen: false);
+
+    _scrollController.addListener(_newMessageListener);
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   _chatController.state.messageStream.listen((event) {
+    //     _lastMsgTimer?.cancel();
+    //     _lastMsgTimer = Timer(
+    //       Duration(milliseconds: 100),
+    //       () => _scrollController.animateTo(
+    //         _scrollController.position.maxScrollExtent,
+    //         duration: Duration(milliseconds: 500),
+    //         curve: Curves.easeOut,
+    //       ),
+    //     );
+    //   });
+    // });
   }
 
   @override
   void dispose() {
     _textController.dispose();
+    _scrollController.removeListener(_newMessageListener);
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  _newMessageListener() {
+    _chatController.state.messageStream.listen((event) {
+      Future.delayed(
+        Duration(milliseconds: 200),
+        () => _scrollController.jumpTo(
+          _scrollController.position.maxScrollExtent,
+        ),
+      );
+    });
   }
 
   @override
@@ -59,36 +93,43 @@ class _ChatPageState extends State<ChatPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Expanded(child: _ChatBody()),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 24.0),
-                      hintText: 'Enter message',
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(28.0),
+            Expanded(child: _ChatBody(scrollController: _scrollController)),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _textController,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 24.0),
+                        hintText: 'Enter message',
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(28.0),
+                        ),
                       ),
+                      onSubmitted: (_) {
+                        _chatController.sendMessage(_textController.text);
+                        _textController.clear();
+                      },
                     ),
                   ),
-                ),
-                SizedBox(width: 8.0),
-                IconButton.filled(
-                  padding: EdgeInsets.all(12.0),
-                  onPressed: () {
-                    if (_textController.text.isNotEmpty) {
-                      HapticFeedback.vibrate();
-                      _chatController.sendMessage(_textController.text);
-                      _textController.clear();
-                    }
-                  },
-                  icon: Icon(Icons.send_rounded),
-                ),
-              ],
+                  SizedBox(width: 8.0),
+                  IconButton.filled(
+                    padding: EdgeInsets.all(12.0),
+                    onPressed: () {
+                      if (_textController.text.isNotEmpty) {
+                        HapticFeedback.vibrate();
+                        _chatController.sendMessage(_textController.text);
+                        _textController.clear();
+                      }
+                    },
+                    icon: Icon(Icons.send_rounded),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -98,7 +139,8 @@ class _ChatPageState extends State<ChatPage> {
 }
 
 class _ChatBody extends StatelessWidget {
-  const _ChatBody({super.key});
+  const _ChatBody({super.key, required this.scrollController});
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +177,8 @@ class _ChatBody extends StatelessWidget {
                     )
                     .toList();
                 return ListView.separated(
+                  controller: scrollController,
+                  padding: EdgeInsets.only(bottom: 40.0),
                   separatorBuilder: (_, __) => SizedBox(height: 4.0),
                   itemCount: messages.length,
                   itemBuilder: (ctx, i) {
@@ -153,14 +197,16 @@ class _ChatBody extends StatelessWidget {
                         ),
                         child: IntrinsicWidth(
                           child: Card(
-                            elevation: 0.0,
+                            elevation: isCurrUser ? 0.0 : 1.0,
                             color: isCurrUser
                                 ? theme.colorScheme.primary
                                 : theme.colorScheme.surface,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Wrap(
-                                alignment: WrapAlignment.end,
+                                alignment: isCurrUser
+                                    ? WrapAlignment.end
+                                    : WrapAlignment.start,
                                 runSpacing: 8.0,
                                 children: [
                                   Text(
@@ -172,7 +218,9 @@ class _ChatBody extends StatelessWidget {
                                         : theme.textTheme.titleMedium,
                                   ),
                                   Align(
-                                    alignment: Alignment.centerRight,
+                                    alignment: isCurrUser
+                                        ? Alignment.centerRight
+                                        : Alignment.centerLeft,
                                     child: Text(
                                       timeString,
                                       style: isCurrUser
