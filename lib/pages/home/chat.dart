@@ -28,20 +28,6 @@ class _ChatPageState extends State<ChatPage> {
     _chatController = Provider.of<ChatController>(context, listen: false);
 
     _scrollController.addListener(_newMessageListener);
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   _chatController.state.messageStream.listen((event) {
-    //     _lastMsgTimer?.cancel();
-    //     _lastMsgTimer = Timer(
-    //       Duration(milliseconds: 100),
-    //       () => _scrollController.animateTo(
-    //         _scrollController.position.maxScrollExtent,
-    //         duration: Duration(milliseconds: 500),
-    //         curve: Curves.easeOut,
-    //       ),
-    //     );
-    //   });
-    // });
   }
 
   @override

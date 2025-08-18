@@ -1,3 +1,4 @@
+import 'package:alarm/alarm.dart';
 import 'package:blood_glucose_monitor/controllers/auth_controller.dart';
 import 'package:blood_glucose_monitor/firebase_options.dart';
 import 'package:blood_glucose_monitor/pages/auth/auth_gate.dart';
@@ -9,6 +10,8 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await Alarm.init();
 
   runApp(
     ChangeNotifierProvider(

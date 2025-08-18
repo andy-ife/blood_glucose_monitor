@@ -1,4 +1,5 @@
 import 'package:blood_glucose_monitor/controllers/chat_controller.dart';
+import 'package:blood_glucose_monitor/controllers/reminders_controller.dart';
 import 'package:blood_glucose_monitor/pages/home/chat.dart';
 import 'package:blood_glucose_monitor/pages/home/dashboard.dart';
 import 'package:blood_glucose_monitor/pages/home/history.dart';
@@ -72,7 +73,14 @@ class _HomePageState extends State<HomePage> {
         top: false,
         child: IndexedStack(
           index: _selectedIndex,
-          children: [DashboardPage(), HistoryPage(), RemindersPage()],
+          children: [
+            DashboardPage(),
+            HistoryPage(),
+            ChangeNotifierProvider(
+              create: (_) => RemindersController(),
+              child: RemindersPage(),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: NavigationBar(
