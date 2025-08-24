@@ -1,11 +1,11 @@
 class Reminder {
-  final String id;
+  final int id;
   final String userId;
   final String description;
   final DateTime? time;
 
   const Reminder({
-    this.id = '0',
+    this.id = 0,
     this.userId = '',
     this.description = 'Take Blood Text',
     this.time,

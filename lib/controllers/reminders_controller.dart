@@ -51,7 +51,7 @@ class RemindersController extends ChangeNotifier {
     state = state.copyWith(isAddingReminder: false);
   }
 
-  Future<void> deleteReminder(String id) async {
+  Future<void> deleteReminder(int id) async {
     final reminders = await _firestore
         .collection('reminders')
         .where('id', isEqualTo: id)
@@ -60,6 +60,8 @@ class RemindersController extends ChangeNotifier {
     for (var doc in reminders.docs) {
       await doc.reference.delete();
     }
+
+    await Alarm.stop(id);
   }
 }
 
@@ -72,7 +74,7 @@ Future<void> _checkAndroidScheduleExactAlarmPermission() async {
 
 Future<void> _addAlarm(Reminder reminder) async {
   final alarmSettings = AlarmSettings(
-    id: 42,
+    id: reminder.id,
     dateTime: reminder.time!,
     assetAudioPath: 'assets/alarm.wav',
     loopAudio: true,

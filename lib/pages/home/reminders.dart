@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:blood_glucose_monitor/controllers/reminders_controller.dart';
 import 'package:blood_glucose_monitor/models/reminder.dart';
 import 'package:blood_glucose_monitor/utils/helpers.dart';
@@ -30,7 +32,7 @@ class RemindersPage extends StatelessWidget {
                 listen: false,
               ).addReminder(
                 Reminder(
-                  id: DateTime.now().toString(),
+                  id: Random().nextInt(1000000),
                   userId: FirebaseAuth.instance.currentUser!.uid,
                   description: description,
                   time: time,
