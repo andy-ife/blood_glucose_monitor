@@ -32,102 +32,68 @@ class OnboardingPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: SizedBox(
                 height: constraints.height,
-                child: Stack(
-                  alignment: Alignment.bottomRight,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/logo1.svg',
-                              height: constraints.height * 0.24,
-                            ),
-                            SizedBox(height: 36.0),
-                            Text.rich(
-                              textAlign: TextAlign.center,
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'BLOOD GLUCOSE',
-                                    style: theme.textTheme.displaySmall,
-                                  ),
-                                  TextSpan(
-                                    text: '\nMONITOR',
-                                    style: theme.textTheme.displayLarge,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                        SvgPicture.asset(
+                          'assets/logo1.svg',
+                          height: constraints.height * 0.24,
                         ),
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: double.infinity,
-                              child: TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => SignInForm(),
-                                    ),
-                                  );
-                                },
-                                style: AppButtonStylesLight.filled.copyWith(
-                                  backgroundColor: WidgetStateProperty.all(
-                                    theme.colorScheme.surface,
-                                  ),
-                                  overlayColor: WidgetStateProperty.all(
-                                    theme.colorScheme.primaryContainer,
-                                  ),
-                                  foregroundColor: WidgetStateProperty.all(
-                                    theme.colorScheme.onSurface,
-                                  ),
-                                  textStyle: WidgetStateProperty.all(
-                                    theme.textTheme.titleMedium,
-                                  ),
-                                ),
-                                child: Text('Sign in'),
+                        SizedBox(height: 36.0),
+                        Text.rich(
+                          textAlign: TextAlign.center,
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'BLOOD GLUCOSE',
+                                style: theme.textTheme.displaySmall,
                               ),
-                            ),
-
-                            SizedBox(height: 16.0),
-                            SizedBox(
-                              width: double.infinity,
-                              child: TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => SignUpForm(),
-                                    ),
-                                  );
-                                },
-                                style: AppButtonStylesLight.text.copyWith(
-                                  foregroundColor: WidgetStateProperty.all(
-                                    theme.colorScheme.surface,
-                                  ),
-                                  overlayColor: WidgetStateProperty.all(
-                                    theme.colorScheme.primaryContainer,
-                                  ),
-                                ),
-                                child: Text('Sign up'),
+                              TextSpan(
+                                text: '\nMONITOR',
+                                style: theme.textTheme.displayLarge,
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: TextButton(
                             onPressed: () {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(builder: (_) => HomePage()),
-                                (route) => false,
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => SignInForm()),
+                              );
+                            },
+                            style: AppButtonStylesLight.filled.copyWith(
+                              backgroundColor: WidgetStateProperty.all(
+                                theme.colorScheme.surface,
+                              ),
+                              overlayColor: WidgetStateProperty.all(
+                                theme.colorScheme.primaryContainer,
+                              ),
+                              foregroundColor: WidgetStateProperty.all(
+                                theme.colorScheme.onSurface,
+                              ),
+                              textStyle: WidgetStateProperty.all(
+                                theme.textTheme.titleMedium,
+                              ),
+                            ),
+                            child: Text('Sign in'),
+                          ),
+                        ),
+
+                        SizedBox(height: 16.0),
+                        SizedBox(
+                          width: double.infinity,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => SignUpForm()),
                               );
                             },
                             style: AppButtonStylesLight.text.copyWith(
@@ -138,16 +104,10 @@ class OnboardingPage extends StatelessWidget {
                                 theme.colorScheme.primaryContainer,
                               ),
                             ),
-                            child: Row(
-                              children: [
-                                Text('Skip'),
-                                SizedBox(width: 4.0),
-                                Icon(Icons.arrow_right),
-                              ],
-                            ),
+                            child: Text('Sign up'),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

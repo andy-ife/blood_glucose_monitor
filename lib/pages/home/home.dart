@@ -1,10 +1,13 @@
 import 'package:blood_glucose_monitor/controllers/chat_controller.dart';
 import 'package:blood_glucose_monitor/controllers/reminders_controller.dart';
+import 'package:blood_glucose_monitor/models/reminder.dart';
 import 'package:blood_glucose_monitor/pages/home/chat.dart';
 import 'package:blood_glucose_monitor/pages/home/dashboard.dart';
 import 'package:blood_glucose_monitor/pages/home/history.dart';
 import 'package:blood_glucose_monitor/pages/home/reminders.dart';
 import 'package:blood_glucose_monitor/widgets/add_reminder.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +28,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       floatingActionButton: _chatFabIndexes.contains(_selectedIndex)
           ? FloatingActionButton(
+              heroTag: 'chat',
               foregroundColor: theme.colorScheme.onPrimary,
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(
@@ -48,39 +52,13 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             )
-          : FloatingActionButton(
-              foregroundColor: theme.colorScheme.onPrimary,
-              onPressed: () => showDialog(
-                context: context,
-                builder: (ctx) =>
-                    AddReminderDialog(onContinue: (description, time) {}),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.add),
-                  Text(
-                    'New',
-                    style: theme.textTheme.labelMedium!.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          : null,
+
       body: SafeArea(
         top: false,
         child: IndexedStack(
           index: _selectedIndex,
-          children: [
-            DashboardPage(),
-            HistoryPage(),
-            ChangeNotifierProvider(
-              create: (_) => RemindersController(),
-              child: RemindersPage(),
-            ),
-          ],
+          children: [DashboardPage(), HistoryPage(), RemindersPage()],
         ),
       ),
       bottomNavigationBar: NavigationBar(

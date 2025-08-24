@@ -1,5 +1,6 @@
 import 'package:alarm/alarm.dart';
 import 'package:blood_glucose_monitor/controllers/auth_controller.dart';
+import 'package:blood_glucose_monitor/controllers/reminders_controller.dart';
 import 'package:blood_glucose_monitor/firebase_options.dart';
 import 'package:blood_glucose_monitor/pages/auth/auth_gate.dart';
 import 'package:blood_glucose_monitor/theme/theme.dart';
@@ -14,8 +15,13 @@ Future<void> main() async {
   await Alarm.init();
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => AuthController(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthController>(create: (_) => AuthController()),
+        ChangeNotifierProvider<RemindersController>(
+          create: (_) => RemindersController(),
+        ),
+      ],
       child: const MyApp(),
     ),
   );

@@ -26,3 +26,47 @@ String timestampToString(Timestamp timestamp, {String? timezone}) {
   DateFormat formatter = DateFormat('MMM d HH:mm');
   return formatter.format(dateTime);
 }
+
+String formatDateTimeToReadable(DateTime date) {
+  final months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  final month = months[date.month - 1];
+  final day = date.day;
+  final hour = date.hour % 12 == 0 ? 12 : date.hour % 12;
+  final minute = date.minute.toString().padLeft(2, '0');
+  final ampm = date.hour >= 12 ? 'pm' : 'am';
+
+  // Get ordinal suffix
+  String suffix;
+  if (day >= 11 && day <= 13) {
+    suffix = 'th';
+  } else {
+    switch (day % 10) {
+      case 1:
+        suffix = 'st';
+        break;
+      case 2:
+        suffix = 'nd';
+        break;
+      case 3:
+        suffix = 'rd';
+        break;
+      default:
+        suffix = 'th';
+    }
+  }
+
+  return '$month $day$suffix  $hour:$minute$ampm';
+}
