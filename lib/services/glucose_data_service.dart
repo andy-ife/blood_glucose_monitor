@@ -19,6 +19,14 @@ class GlucoseDataService {
   Stream<List<Reading>> get monthly =>
       _stream.map((data) => _groupByWeek(data, weeks: 4));
 
+  Stream<List<Reading>> recent(Duration duration) {
+    return _stream.map(
+      (data) => data
+          .where((d) => d.time.isAfter(DateTime.now().subtract(duration)))
+          .toList(),
+    );
+  }
+
   List<Reading> _groupByHour(List<Reading> readings) {
     final cutoff = DateTime.now().subtract(Duration(hours: 24));
     final recent = readings.where((r) => r.time.isAfter(cutoff)).toList();
