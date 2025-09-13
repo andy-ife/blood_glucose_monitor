@@ -1,13 +1,8 @@
 import 'package:blood_glucose_monitor/controllers/chat_controller.dart';
-import 'package:blood_glucose_monitor/controllers/reminders_controller.dart';
-import 'package:blood_glucose_monitor/models/reminder.dart';
 import 'package:blood_glucose_monitor/pages/home/chat.dart';
 import 'package:blood_glucose_monitor/pages/home/dashboard.dart';
 import 'package:blood_glucose_monitor/pages/home/history.dart';
 import 'package:blood_glucose_monitor/pages/home/reminders.dart';
-import 'package:blood_glucose_monitor/widgets/add_reminder.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -20,8 +20,6 @@ class _ChatPageState extends State<ChatPage> {
   final ScrollController _scrollController = ScrollController();
   late ChatController _chatController;
 
-  Timer? _lastMsgTimer;
-
   @override
   void initState() {
     super.initState();
@@ -125,7 +123,7 @@ class _ChatPageState extends State<ChatPage> {
 }
 
 class _ChatBody extends StatelessWidget {
-  const _ChatBody({super.key, required this.scrollController});
+  const _ChatBody({required this.scrollController});
   final ScrollController scrollController;
 
   @override

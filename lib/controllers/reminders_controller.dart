@@ -1,9 +1,6 @@
 import 'dart:io';
 
 import 'package:alarm/alarm.dart';
-import 'package:alarm/model/alarm_settings.dart';
-import 'package:alarm/model/notification_settings.dart';
-import 'package:alarm/model/volume_settings.dart';
 import 'package:blood_glucose_monitor/models/reminder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +9,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 class RemindersController extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   RemindersController() {
     fetchRemindersStream();

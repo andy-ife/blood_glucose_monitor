@@ -1,6 +1,5 @@
 import 'package:blood_glucose_monitor/pages/auth/signin.dart';
 import 'package:blood_glucose_monitor/pages/auth/signup.dart';
-import 'package:blood_glucose_monitor/pages/home/home.dart';
 import 'package:blood_glucose_monitor/theme/styles.dart';
 import 'package:blood_glucose_monitor/widgets/gradient_background.dart';
 import 'package:flutter/material.dart';
