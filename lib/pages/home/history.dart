@@ -35,7 +35,7 @@ class _HistoryPageState extends State<HistoryPage>
       appBar: AppBar(
         title: const Text('History'),
         bottom: TabBar(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8.0),
           controller: _tabController,
           tabs: const [
             Tab(text: 'History'),
