@@ -1,7 +1,7 @@
 import 'package:blood_glucose_monitor/controllers/dashboard_controller.dart';
 import 'package:blood_glucose_monitor/pages/home/tests.dart';
 import 'package:blood_glucose_monitor/theme/colors.dart';
-import 'package:blood_glucose_monitor/widgets/gradient_background.dart';
+import 'package:blood_glucose_monitor/widgets/current_test_card.dart';
 import 'package:blood_glucose_monitor/widgets/profile_settings_dialog.dart';
 import 'package:blood_glucose_monitor/widgets/shimmer_loading.dart';
 import 'package:blood_glucose_monitor/widgets/status_greeting.dart';
@@ -79,131 +79,15 @@ class DashboardPage extends StatelessWidget {
           child: Column(
             spacing: 20.0,
             children: [
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadiusGeometry.circular(24.0),
-                ),
-                child: SizedBox(
-                  height: constraints.height * 0.16,
-                  child: GradientBackground(
-                    borderRadius: 24.0,
-                    gradient: LinearGradient(
-                      colors: [AppColors.primary, AppColors.primaryLight],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Current Test',
-                                style: theme.textTheme.titleMedium!.copyWith(
-                                  color: theme.colorScheme.onPrimary,
-                                ),
-                              ),
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Today  ',
-                                      style: theme.textTheme.bodySmall!
-                                          .copyWith(
-                                            color: theme.colorScheme.onPrimary,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                    ),
-                                    TextSpan(
-                                      text: '11:00',
-                                      style: theme.textTheme.titleMedium!
-                                          .copyWith(
-                                            color: theme.colorScheme.onPrimary,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Row(
-                                spacing: 8.0,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: '152 ',
-                                          style: theme.textTheme.headlineLarge!
-                                              .copyWith(
-                                                color:
-                                                    theme.colorScheme.onPrimary,
-                                              ),
-                                        ),
-                                        TextSpan(
-                                          text: 'mg/dL',
-                                          style: theme.textTheme.bodyMedium!
-                                              .copyWith(
-                                                color:
-                                                    theme.colorScheme.onPrimary,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      color: theme.colorScheme.surface,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            height: 6.0,
-                                            width: 6.0,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: AppColors.green,
-                                            ),
-                                          ),
-                                          SizedBox(width: 4.0),
-                                          Text(
-                                            'Good',
-                                            style: theme.textTheme.bodySmall!
-                                                .copyWith(
-                                                  fontWeight: FontWeight.w600,
-                                                  color: AppColors.green,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              SvgPicture.asset(
-                                'assets/blood/blue-light.svg',
-                                width: 40.0,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
+              state.loading
+                  ? ShimmerLoading(
+                      height: constraints.height * 0.16,
+                      width: double.infinity,
+                      borderRadius: BorderRadius.circular(24.0),
+                    )
+                  : state.currentTest == null
+                  ? SizedBox.shrink()
+                  : CurrentTestCard(reading: state.currentTest!),
               Card(
                 color: AppColors.white,
                 child: SizedBox(
