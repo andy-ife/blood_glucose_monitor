@@ -1,4 +1,5 @@
 import 'package:blood_glucose_monitor/constants/glucose_level.dart';
+import 'package:blood_glucose_monitor/models/reading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -92,4 +93,17 @@ extension StringCasingExtension on String {
     if (isEmpty) return this;
     return this[0].toUpperCase() + substring(1);
   }
+}
+
+double getAverageGlucose(List<Reading> readings) {
+  final sum = readings.map((e) => e.glucose).reduce((a, b) => a + b);
+  return sum / readings.length;
+}
+
+double getHighestGlucose(List<Reading> readings) {
+  return readings.map((e) => e.glucose).reduce((a, b) => a < b ? a : b);
+}
+
+double getLowestGlucose(List<Reading> readings) {
+  return readings.map((e) => e.glucose).reduce((a, b) => a > b ? a : b);
 }

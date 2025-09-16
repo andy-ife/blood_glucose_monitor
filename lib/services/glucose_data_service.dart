@@ -46,7 +46,7 @@ class GlucoseDataService {
             glucose: avgGlucose,
             time: DateTime.now(),
             xAxis: hour,
-            chartLabel: "${hour.toString().padLeft(2, '0')}:00",
+            chartLabel: "hourly", //"${hour.toString().padLeft(2, '0')}:00",
           ),
         );
       }
@@ -79,7 +79,7 @@ class GlucoseDataService {
             glucose: avgGlucose,
             time: targetDay,
             xAxis: 6 - i, // 0=oldest, 6=today
-            chartLabel: _getDayLabel(targetDay.weekday - 1),
+            chartLabel: "daily", //_getDayLabel(targetDay.weekday - 1),
           ),
         );
       }
@@ -117,7 +117,7 @@ class GlucoseDataService {
             glucose: avgGlucose,
             time: weekStart,
             xAxis: weeks - 1 - i, // 0=oldest week, 7=current week
-            chartLabel: _getWeekLabel(weekStart, i),
+            chartLabel: "weekly", //_getWeekLabel(weekStart, i),
           ),
         );
       }
