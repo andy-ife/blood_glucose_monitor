@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthController extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final _userCollectionRef = FirebaseFirestore.instance.collection('users');
 
   AuthState state = AuthState();
 
@@ -58,12 +56,9 @@ class AuthController extends ChangeNotifier {
         password: password,
       );
 
-      await _userCollectionRef.add({
-        'id': creds.user!.uid,
-        'username': username,
-        'email': email,
-        'profilePhoto': profilePhoto,
-      });
+      await creds.user!.updateDisplayName(username);
+      await creds.user!.updatePhotoURL(profilePhoto);
+      await creds.user!.reload();
 
       return creds;
     } on Exception catch (e) {

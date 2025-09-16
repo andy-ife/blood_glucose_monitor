@@ -1,3 +1,4 @@
+import 'package:blood_glucose_monitor/controllers/dashboard_controller.dart';
 import 'package:blood_glucose_monitor/pages/home/tests.dart';
 import 'package:blood_glucose_monitor/theme/colors.dart';
 import 'package:blood_glucose_monitor/widgets/gradient_background.dart';
@@ -5,6 +6,7 @@ import 'package:blood_glucose_monitor/widgets/profile_settings_dialog.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -13,6 +15,8 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final constraints = MediaQuery.of(context).size;
+    final controller = context.watch<DashboardController>();
+    final state = controller.state;
 
     return Scaffold(
       appBar: AppBar(
@@ -43,7 +47,7 @@ class DashboardPage extends StatelessWidget {
                 children: [
                   TextSpan(text: 'Hello, ', style: theme.textTheme.bodyLarge),
                   TextSpan(
-                    text: '_glucoseboy',
+                    text: state.currentUser.displayName,
                     style: theme.textTheme.titleMedium,
                   ),
                 ],
