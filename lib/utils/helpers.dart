@@ -1,3 +1,4 @@
+import 'package:blood_glucose_monitor/constants/glucose_level.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -69,4 +70,19 @@ String formatDateTimeToReadable(DateTime date) {
   }
 
   return '$month $day$suffix  $hour:$minute$ampm';
+}
+
+GlucoseLevel getGlucoseLevel(double reading) {
+  GlucoseLevel level;
+
+  if (reading < 70) {
+    level = GlucoseLevel.low;
+  } else if (reading >= 70 && reading < 100) {
+    level = GlucoseLevel.good;
+  } else if (reading >= 100 && reading < 126) {
+    level = GlucoseLevel.ok;
+  } else {
+    level = GlucoseLevel.high;
+  }
+  return level;
 }
