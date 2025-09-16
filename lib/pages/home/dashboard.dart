@@ -2,12 +2,12 @@ import 'package:blood_glucose_monitor/controllers/dashboard_controller.dart';
 import 'package:blood_glucose_monitor/pages/home/tests.dart';
 import 'package:blood_glucose_monitor/theme/colors.dart';
 import 'package:blood_glucose_monitor/widgets/current_test_card.dart';
+import 'package:blood_glucose_monitor/widgets/glucose_chart.dart';
 import 'package:blood_glucose_monitor/widgets/profile_settings_dialog.dart';
+import 'package:blood_glucose_monitor/widgets/recent_test_card.dart';
 import 'package:blood_glucose_monitor/widgets/shimmer_loading.dart';
 import 'package:blood_glucose_monitor/widgets/status_greeting.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -88,17 +88,12 @@ class DashboardPage extends StatelessWidget {
                   : state.currentTest == null
                   ? SizedBox.shrink()
                   : CurrentTestCard(reading: state.currentTest!),
-              Card(
-                color: AppColors.white,
-                child: SizedBox(
-                  height: constraints.height * 0.36,
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: BarChart(BarChartData()),
-                  ),
-                ),
-              ),
-
+              state.loading
+                  ? ShimmerLoading(
+                      height: constraints.height * 0.36,
+                      width: double.infinity,
+                    )
+                  : GlucoseChart(readings: state.todayTests),
               Column(
                 spacing: 16.0,
                 children: [
@@ -126,114 +121,8 @@ class DashboardPage extends StatelessWidget {
                     ],
                   ),
                   ...List.generate(
-                    4,
-                    (i) => Card(
-                      color: AppColors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(16.0),
-                      ),
-                      child: SizedBox(
-                        height: constraints.height * 0.10,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 16.0,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Yesterday',
-                                    style: theme.textTheme.bodyMedium!,
-                                  ),
-                                  Text(
-                                    '11:00',
-                                    style: theme.textTheme.bodyMedium!,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Row(
-                                    spacing: 8.0,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: '152 ',
-                                              style: theme.textTheme.titleLarge,
-                                            ),
-                                            TextSpan(
-                                              text: 'mg/dL',
-                                              style: theme.textTheme.bodySmall!
-                                                  .copyWith(
-                                                    color: theme
-                                                        .colorScheme
-                                                        .onSurfaceVariant,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            16.0,
-                                          ),
-                                          color: theme.colorScheme.surface,
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                height: 5.0,
-                                                width: 5.0,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: AppColors.green,
-                                                ),
-                                              ),
-                                              SizedBox(width: 3.0),
-                                              Text(
-                                                'Good',
-                                                style: theme
-                                                    .textTheme
-                                                    .labelSmall!
-                                                    .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: AppColors.green,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-
-                                  SvgPicture.asset(
-                                    'assets/blood/blue-light.svg',
-                                    width: 28.0,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                    state.recentTests.length,
+                    (i) => RecentTestCard(reading: state.recentTests[i]),
                   ),
                 ],
               ),

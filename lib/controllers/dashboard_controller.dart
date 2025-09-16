@@ -28,9 +28,7 @@ class DashboardController extends ChangeNotifier {
 
     final latest = _service.latest.map((e) => ("latest", e));
     final daily = _service.daily.map((e) => ("daily", e));
-    final recent = _service
-        .recent(Duration(days: 30))
-        .map((e) => ("recent", e));
+    final recent = _service.recent(Duration(days: 1)).map((e) => ("recent", e));
 
     _stream =
         StreamGroup.merge([latest, daily, recent]).listen((data) {
