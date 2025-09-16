@@ -26,37 +26,25 @@ class DashboardController extends ChangeNotifier {
     state = state.copyWith(loading: true, error: '');
     notifyListeners();
 
-    final timer = Timer(Duration(seconds: 10), () {
-      if (!_checkLoadingDone()) {
-        state = state.copyWith(loading: false);
-        notifyListeners();
-      }
-    });
-
     final latest = _service.latest.map((e) => ("latest", e));
     final daily = _service.daily.map((e) => ("daily", e));
-    final recent = _service.recent(Duration(days: 1)).map((e) => ("recent", e));
+    final recent = _service
+        .recent(Duration(days: 30))
+        .map((e) => ("recent", e));
 
     _stream =
         StreamGroup.merge([latest, daily, recent]).listen((data) {
-          if (!timer.isActive) return;
-
-          switch (data) {
-            case ("latest", const (Reading)?):
-              state = state.copyWith(currentTest: data.$2 as Reading?);
-              state = state.copyWith(loading: _checkLoadingDone());
+          state = state.copyWith(loading: false);
+          final (tag, value) = data;
+          switch (tag) {
+            case "latest":
+              state = state.copyWith(currentTest: value as Reading);
               break;
-            case ("daily", const (List<Reading>)):
-              state = state.copyWith(
-                loading: _checkLoadingDone(),
-                todayTests: data.$2 as List<Reading>,
-              );
+            case "daily":
+              state = state.copyWith(todayTests: value as List<Reading>);
               break;
-            case ("recent", const (List<Reading>)):
-              state = state.copyWith(
-                loading: _checkLoadingDone(),
-                recentTests: data.$2 as List<Reading>,
-              );
+            case "recent":
+              state = state.copyWith(recentTests: value as List<Reading>);
               break;
             default:
               break;
@@ -66,10 +54,6 @@ class DashboardController extends ChangeNotifier {
           state = state.copyWith(loading: false, error: e.toString());
           notifyListeners();
         });
-  }
-
-  bool _checkLoadingDone() {
-    return state.currentTest != null;
   }
 
   @override

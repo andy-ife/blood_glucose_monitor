@@ -3,6 +3,8 @@ import 'package:blood_glucose_monitor/pages/home/tests.dart';
 import 'package:blood_glucose_monitor/theme/colors.dart';
 import 'package:blood_glucose_monitor/widgets/gradient_background.dart';
 import 'package:blood_glucose_monitor/widgets/profile_settings_dialog.dart';
+import 'package:blood_glucose_monitor/widgets/shimmer_loading.dart';
+import 'package:blood_glucose_monitor/widgets/status_greeting.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -53,20 +55,20 @@ class DashboardPage extends StatelessWidget {
                 ],
               ),
             ),
-            Row(
-              children: [
-                Text('You are healthy', style: theme.textTheme.titleLarge),
-                SizedBox(width: 4.0),
-                Container(
-                  height: 8.0,
-                  width: 8.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.green,
-                  ),
-                ),
-              ],
-            ),
+            state.loading
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: ShimmerLoading(height: 20.0, width: 152),
+                  )
+                : state.currentTest == null
+                ? Text(
+                    "We couldn't get your current test",
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      color: AppColors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                : StatusGreeting(reading: state.currentTest!.glucose),
           ],
         ),
       ),
