@@ -147,45 +147,78 @@ class GlucoseChart extends StatelessWidget {
             ),
           ),
           SizedBox(height: 16.0),
-          SizedBox(
+          Container(
             height: constraints.height * 0.36,
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: LineChart(
-                LineChartData(
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: readings
-                          .map((r) => FlSpot(r.xAxis!.toDouble(), r.glucose))
-                          .toList(),
-                      color: AppColors.primary,
-                      barWidth: 3.0,
-                      isCurved: true,
-                      preventCurveOverShooting: true,
-                      isStrokeCapRound: true,
-                      isStrokeJoinRound: true,
-                      dotData: FlDotData(show: false),
-                    ),
-                  ],
-                  titlesData: FlTitlesData(
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    topTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
+            padding: EdgeInsets.all(16.0),
+            child: LineChart(
+              LineChartData(
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: readings
+                        .map((r) => FlSpot(r.xAxis!.toDouble(), r.glucose))
+                        .toList(),
+                    color: AppColors.primary,
+                    barWidth: 3.0,
+                    isCurved: true,
+                    preventCurveOverShooting: true,
+                    isStrokeCapRound: true,
+                    isStrokeJoinRound: true,
+                    dotData: FlDotData(show: false),
+                  ),
+                ],
+                titlesData: FlTitlesData(
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 40,
+                      getTitlesWidget: (value, meta) => SideTitleWidget(
+                        meta: meta,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            "${value.toInt()}",
+                            style: theme.textTheme.labelSmall,
+                          ),
+                        ),
+                      ),
+                      interval: 100,
+                      minIncluded: false,
+                      maxIncluded: false,
                     ),
                   ),
-                  minX: 0,
-                  maxX: _getMaxX(),
-                  minY: 0,
-                  maxY: 300,
-                  borderData: FlBorderData(show: false),
-                  gridData: FlGridData(
-                    show: true,
-                    drawHorizontalLine: false,
-                    getDrawingVerticalLine: (e) =>
-                        FlLine(color: AppColors.lightGrey.withOpacity(0.4)),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 40,
+                      getTitlesWidget: (value, meta) => SideTitleWidget(
+                        meta: meta,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            "${value.toInt()}",
+                            style: theme.textTheme.labelSmall,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
+                ),
+                minX: 0,
+                maxX: _getMaxX(),
+                minY: 0,
+                maxY: 300,
+                borderData: FlBorderData(show: false),
+                gridData: FlGridData(
+                  show: true,
+                  drawHorizontalLine: false,
+                  getDrawingVerticalLine: (e) =>
+                      FlLine(color: AppColors.lightGrey.withOpacity(0.4)),
                 ),
               ),
             ),
