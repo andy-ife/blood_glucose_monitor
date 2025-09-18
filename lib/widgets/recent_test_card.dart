@@ -50,7 +50,7 @@ class RecentTestCard extends StatelessWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: reading.glucose.ceil().toString(),
+                              text: reading.glucose.toStringAsFixed(1),
                               style: theme.textTheme.titleLarge,
                             ),
                             TextSpan(

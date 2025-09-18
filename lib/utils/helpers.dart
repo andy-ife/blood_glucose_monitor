@@ -99,17 +99,17 @@ extension StringCasingExtension on String {
 
 double getAverageGlucose(List<Reading> readings) {
   final sum = readings.map((e) => e.glucose).reduce((a, b) => a + b);
-  return (sum / readings.length * 10).round() / 10;
+  return ((sum / readings.length) * 10).round() / 10;
 }
 
 double getHighestGlucose(List<Reading> readings) {
-  return (readings.map((e) => e.glucose).reduce((a, b) => a < b ? a : b) * 10)
+  return (readings.map((e) => e.glucose).reduce((a, b) => a > b ? a : b) * 10)
           .round() /
       10;
 }
 
 double getLowestGlucose(List<Reading> readings) {
-  return (readings.map((e) => e.glucose).reduce((a, b) => a > b ? a : b) * 10)
+  return (readings.map((e) => e.glucose).reduce((a, b) => a < b ? a : b) * 10)
           .round() /
       10;
 }
