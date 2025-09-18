@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+final days = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
+
 bool isDarkMode(ThemeData theme) {
   return theme.brightness == Brightness.dark;
 }
@@ -97,13 +99,17 @@ extension StringCasingExtension on String {
 
 double getAverageGlucose(List<Reading> readings) {
   final sum = readings.map((e) => e.glucose).reduce((a, b) => a + b);
-  return sum / readings.length;
+  return (sum / readings.length * 10).round() / 10;
 }
 
 double getHighestGlucose(List<Reading> readings) {
-  return readings.map((e) => e.glucose).reduce((a, b) => a < b ? a : b);
+  return (readings.map((e) => e.glucose).reduce((a, b) => a < b ? a : b) * 10)
+          .round() /
+      10;
 }
 
 double getLowestGlucose(List<Reading> readings) {
-  return readings.map((e) => e.glucose).reduce((a, b) => a > b ? a : b);
+  return (readings.map((e) => e.glucose).reduce((a, b) => a > b ? a : b) * 10)
+          .round() /
+      10;
 }

@@ -16,6 +16,22 @@ class GlucoseChart extends StatelessWidget {
     final theme = Theme.of(context);
     final constraints = MediaQuery.of(context).size;
 
+    if (readings.isEmpty) {
+      return Center(
+        child: Column(
+          spacing: 16.0,
+          children: [
+            Icon(
+              Icons.medical_information,
+              size: constraints.height * 0.36,
+              color: AppColors.lightGrey,
+            ),
+            Text("No readings"),
+          ],
+        ),
+      );
+    }
+
     final averageGlucose = getAverageGlucose(readings);
     final level = getGlucoseLevel(averageGlucose);
 
@@ -147,78 +163,81 @@ class GlucoseChart extends StatelessWidget {
             ),
           ),
           SizedBox(height: 16.0),
-          Container(
-            height: constraints.height * 0.36,
-            padding: EdgeInsets.all(16.0),
-            child: LineChart(
-              LineChartData(
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: readings
-                        .map((r) => FlSpot(r.xAxis!.toDouble(), r.glucose))
-                        .toList(),
-                    color: AppColors.primary,
-                    barWidth: 3.0,
-                    isCurved: true,
-                    preventCurveOverShooting: true,
-                    isStrokeCapRound: true,
-                    isStrokeJoinRound: true,
-                    dotData: FlDotData(show: false),
-                  ),
-                ],
-                titlesData: FlTitlesData(
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 40,
-                      getTitlesWidget: (value, meta) => SideTitleWidget(
-                        meta: meta,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              height: constraints.height * 0.40,
+              width: constraints.width * _getChartWidth(),
+              padding: EdgeInsets.all(16.0),
+              child: LineChart(
+                LineChartData(
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: readings
+                          .map((r) => FlSpot(r.xAxis!.toDouble(), r.glucose))
+                          .toList(),
+                      color: AppColors.primary,
+                      barWidth: 3.0,
+                      isCurved: true,
+                      preventCurveOverShooting: true,
+                      isStrokeCapRound: true,
+                      isStrokeJoinRound: true,
+                      dotData: FlDotData(show: false),
+                    ),
+                  ],
+                  titlesData: FlTitlesData(
+                    rightTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    topTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 40,
+                        getTitlesWidget: (value, meta) => SideTitleWidget(
+                          meta: meta,
                           child: Text(
                             "${value.toInt()}",
                             style: theme.textTheme.labelSmall,
                           ),
                         ),
+                        //interval: 100,
+                        minIncluded: false,
+                        maxIncluded: false,
                       ),
-                      interval: 100,
-                      minIncluded: false,
-                      maxIncluded: false,
                     ),
-                  ),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 40,
-                      getTitlesWidget: (value, meta) => SideTitleWidget(
-                        meta: meta,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            "${value.toInt()}",
-                            style: theme.textTheme.labelSmall,
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 40,
+                        interval: _getInterval(),
+                        getTitlesWidget: (value, meta) => SideTitleWidget(
+                          meta: meta,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              _getBottomTitle(value).toString(),
+                              style: theme.textTheme.labelSmall,
+                            ),
                           ),
                         ),
+                        maxIncluded: readings.first.chartLabel != "hourly",
                       ),
                     ),
                   ),
-                ),
-                minX: 0,
-                maxX: _getMaxX(),
-                minY: 0,
-                maxY: 300,
-                borderData: FlBorderData(show: false),
-                gridData: FlGridData(
-                  show: true,
-                  drawHorizontalLine: false,
-                  getDrawingVerticalLine: (e) =>
-                      FlLine(color: AppColors.lightGrey.withOpacity(0.4)),
+                  minX: 0,
+                  maxX: _getMaxX(),
+                  minY: 0,
+                  maxY: 300,
+                  borderData: FlBorderData(show: false),
+                  gridData: FlGridData(
+                    show: true,
+                    drawHorizontalLine: false,
+                    getDrawingVerticalLine: (e) =>
+                        FlLine(color: AppColors.lightGrey.withOpacity(0.4)),
+                  ),
                 ),
               ),
             ),
@@ -242,5 +261,37 @@ class GlucoseChart extends StatelessWidget {
         : readings.first.chartLabel == "daily"
         ? "Last 7 Days"
         : "Last Month";
+  }
+
+  double _getInterval() {
+    return readings.first.chartLabel == "hourly"
+        ? 2
+        : readings.first.chartLabel == "daily"
+        ? 1
+        : 4;
+  }
+
+  double _getChartWidth() {
+    return readings.first.chartLabel == "hourly"
+        ? 2
+        : readings.first.chartLabel == "daily"
+        ? 1.2
+        : 1.6;
+  }
+
+  dynamic _getBottomTitle(double value) {
+    dynamic result;
+    switch (readings.first.chartLabel) {
+      case "hourly":
+        result = "${value.toInt()}:00";
+        break;
+      case "daily":
+        result = days[(value - 1).toInt()];
+        break;
+      default:
+        result = value.toInt();
+        break;
+    }
+    return result;
   }
 }

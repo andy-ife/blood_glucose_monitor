@@ -125,19 +125,4 @@ class GlucoseDataService {
 
     return grouped;
   }
-
-  String _getDayLabel(int dayIndex) {
-    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    return days[dayIndex];
-  }
-
-  String _getWeekLabel(DateTime weekStart, int weeksAgo) {
-    if (weeksAgo == 0) {
-      return "This week";
-    } else if (weeksAgo == 1) {
-      return "Last week";
-    } else {
-      return "${weekStart.month}/${weekStart.day}";
-    }
-  }
 }
