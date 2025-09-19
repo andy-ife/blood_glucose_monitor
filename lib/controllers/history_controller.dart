@@ -12,27 +12,29 @@ class HistoryController extends ChangeNotifier {
   final StreamController<String> _streamController = StreamController<String>();
   StreamSubscription? _subscription;
 
+  final tabs = ['Today', 'Last 7 Days', 'Last Month', 'All'];
+
   HistoryController() {
     init();
-    switchTimeframe('daily');
+    switchTimeframe('Today');
   }
 
   void init() {
     if (state.loading) return;
     state = state.copyWith(loading: true, error: '');
 
-    _streamController.stream.listen((streamIndex) {
+    _streamController.stream.asBroadcastStream().listen((streamIndex) {
       _subscription?.cancel();
 
       Stream<List<Reading>> targetStream;
       switch (streamIndex) {
-        case 'daily':
+        case 'Today':
           targetStream = _service.daily;
           break;
-        case 'weekly':
+        case 'Last 7 Days':
           targetStream = _service.weekly;
           break;
-        case 'monthly':
+        case 'Last Month':
           targetStream = _service.monthly;
           break;
         default:

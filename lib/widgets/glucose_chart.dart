@@ -7,9 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class GlucoseChart extends StatelessWidget {
-  const GlucoseChart({super.key, required this.readings});
+  const GlucoseChart({super.key, required this.readings, this.compact = false});
 
   final List<Reading> readings;
+  final bool compact;
+
+  factory GlucoseChart.compact({required List<Reading> readings}) =>
+      GlucoseChart(readings: readings, compact: true);
 
   @override
   Widget build(BuildContext context) {
@@ -39,130 +43,133 @@ class GlucoseChart extends StatelessWidget {
       color: AppColors.white,
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 12.0,
-              right: 12.0,
-              top: 12.0,
-              bottom: 8.0,
+          if (!compact)
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 12.0,
+                right: 12.0,
+                top: 12.0,
+                bottom: 8.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(_getTitle(), style: theme.textTheme.titleLarge),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.open_in_new, color: AppColors.darkGrey),
+                  ),
+                ],
+              ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(_getTitle(), style: theme.textTheme.titleLarge),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.open_in_new, color: AppColors.darkGrey),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                          level == GlucoseLevel.good
-                              ? 'assets/blood/blue-light.svg'
-                              : level == GlucoseLevel.ok
-                              ? 'assets/blood/amber-light.svg'
-                              : 'assets/blood/red-light.svg',
-                          width: 20.0,
-                        ),
-                        SizedBox(width: 4.0),
-                        Text('Avg', style: theme.textTheme.bodySmall),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+          if (!compact) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: averageGlucose.toString(),
-                                  style: theme.textTheme.titleMedium,
-                                ),
-                                TextSpan(
-                                  text: ' mg/dL',
-                                  style: theme.textTheme.bodySmall!,
-                                ),
-                              ],
-                            ),
+                          SvgPicture.asset(
+                            level == GlucoseLevel.good
+                                ? 'assets/blood/blue-light.svg'
+                                : level == GlucoseLevel.ok
+                                ? 'assets/blood/amber-light.svg'
+                                : 'assets/blood/red-light.svg',
+                            width: 20.0,
                           ),
                           SizedBox(width: 4.0),
-                          Container(
-                            height: 5.0,
-                            width: 5.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: level == GlucoseLevel.good
-                                  ? AppColors.green
-                                  : level == GlucoseLevel.ok
-                                  ? AppColors.amber
-                                  : AppColors.red,
-                            ),
-                          ),
-                          SizedBox(width: 3.0),
-                          Text(
-                            level.name.capitalize(),
-                            style: theme.textTheme.labelSmall!.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: level == GlucoseLevel.good
-                                  ? AppColors.green
-                                  : level == GlucoseLevel.ok
-                                  ? AppColors.amber
-                                  : AppColors.red,
-                            ),
-                          ),
+                          Text('Avg', style: theme.textTheme.bodySmall),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.arrow_upward, size: 16.0),
-                        SizedBox(width: 8.0),
-                        Text(
-                          "High: ${getHighestGlucose(readings)}",
-                          style: theme.textTheme.bodySmall,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: averageGlucose.toString(),
+                                    style: theme.textTheme.titleMedium,
+                                  ),
+                                  TextSpan(
+                                    text: ' mg/dL',
+                                    style: theme.textTheme.bodySmall!,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 4.0),
+                            Container(
+                              height: 5.0,
+                              width: 5.0,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: level == GlucoseLevel.good
+                                    ? AppColors.green
+                                    : level == GlucoseLevel.ok
+                                    ? AppColors.amber
+                                    : AppColors.red,
+                              ),
+                            ),
+                            SizedBox(width: 3.0),
+                            Text(
+                              level.name.capitalize(),
+                              style: theme.textTheme.labelSmall!.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: level == GlucoseLevel.good
+                                    ? AppColors.green
+                                    : level == GlucoseLevel.ok
+                                    ? AppColors.amber
+                                    : AppColors.red,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 2.0),
-                      child: Row(
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.arrow_downward, size: 16.0),
+                          Icon(Icons.arrow_upward, size: 16.0),
                           SizedBox(width: 8.0),
                           Text(
-                            "Low: ${getLowestGlucose(readings)}",
+                            "High: ${getHighestGlucose(readings)}",
                             style: theme.textTheme.bodySmall,
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Padding(
+                        padding: const EdgeInsets.only(right: 2.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.arrow_downward, size: 16.0),
+                            SizedBox(width: 8.0),
+                            Text(
+                              "Low: ${getLowestGlucose(readings)}",
+                              style: theme.textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 16.0),
+            SizedBox(height: 16.0),
+          ],
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Container(
@@ -286,7 +293,7 @@ class GlucoseChart extends StatelessWidget {
         result = "${value.toInt()}:00";
         break;
       case "daily":
-        result = days[(value - 1).toInt()];
+        result = days[(value > 0 ? value - 1 : 0).toInt()];
         break;
       default:
         result = value.toInt();
