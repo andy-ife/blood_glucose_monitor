@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light,
       themeMode: ThemeMode.light,
       home: AuthGate(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

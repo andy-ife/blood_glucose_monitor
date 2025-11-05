@@ -231,6 +231,7 @@ class GlucoseChart extends StatelessWidget {
                           ),
                         ),
                         maxIncluded: readings.first.chartLabel != "hourly",
+                        minIncluded: false,
                       ),
                     ),
                   ),
