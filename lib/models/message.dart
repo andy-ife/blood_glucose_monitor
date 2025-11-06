@@ -30,12 +30,12 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      senderId: json['senderId'],
-      senderEmail: json['senderEmail'],
-      receiverId: json['receiverId'],
-      message: json['message'],
-      timestamp: json['timestamp'],
-      isRead: json['isRead'],
+      senderId: json['senderId'] ?? "",
+      senderEmail: json['senderEmail'] ?? "",
+      receiverId: json['receiverId'] ?? "",
+      message: json['message'] ?? "no message",
+      timestamp: json['timestamp'] ?? Timestamp.now(),
+      isRead: json['isRead'] ?? false,
     );
   }
 }

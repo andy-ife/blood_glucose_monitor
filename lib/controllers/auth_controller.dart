@@ -60,13 +60,13 @@ class AuthController extends ChangeNotifier {
 
       await creds.user!.updateDisplayName(username);
       await creds.user!.updatePhotoURL(profilePhoto);
-      await creds.user!.reload();
+      await Future.delayed(Duration(seconds: 5), () => creds.user!.reload());
 
       await _firestore.collection("users").add({
         "id": creds.user!.uid,
-        "username": creds.user!.displayName,
-        "profilePhoto": creds.user!.photoURL,
-        "email": creds.user!.email,
+        "username": username,
+        "profilePhoto": profilePhoto,
+        "email": email,
       });
 
       return creds;
