@@ -30,7 +30,7 @@ class GlucoseChart extends StatelessWidget {
               size: constraints.height * 0.36,
               color: AppColors.lightGrey,
             ),
-            Text("No readings"),
+            Text("No readings for today"),
           ],
         ),
       );

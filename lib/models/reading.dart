@@ -32,9 +32,9 @@ class Reading {
 
   factory Reading.fromJson(Map<String, dynamic> json) {
     return Reading(
-      glucose: (json['glucose'] ?? 90 as num).toDouble(),
+      glucose: (json['glucose'] ?? 0 as num).toDouble(),
       time:
-          DateTime.tryParse(json['timestamp'] as String)?.toLocal() ??
+          DateTime.tryParse((json['timestamp'] as String))?.toLocal() ??
           DateTime.fromMillisecondsSinceEpoch(0),
     );
   }
