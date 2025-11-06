@@ -29,7 +29,11 @@ class GlucoseDataService {
 
   List<Reading> _groupByHour(List<Reading> readings) {
     final cutoff = DateTime.now().subtract(Duration(hours: 24));
-    final recent = readings.where((r) => r.time.isAfter(cutoff)).toList();
+    final recent = readings
+        .where(
+          (r) => r.time.isAfter(cutoff) && r.time.day == DateTime.now().day,
+        )
+        .toList();
     recent.forEach((e) => print(e.time.toIso8601String()));
     final List<Reading> grouped = [];
 

@@ -49,7 +49,7 @@ class DashboardPage extends StatelessWidget {
                 children: [
                   TextSpan(text: 'Hello, ', style: theme.textTheme.bodyLarge),
                   TextSpan(
-                    text: 'Peter', //state.currentUser.displayName,
+                    text: state.currentUser.displayName,
                     style: theme.textTheme.titleMedium,
                   ),
                 ],
