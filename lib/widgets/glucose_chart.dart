@@ -217,7 +217,7 @@ class GlucoseChart extends StatelessWidget {
                     ),
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
-                        showTitles: true,
+                        showTitles: readings.first.chartLabel != "all",
                         reservedSize: 40,
                         interval: _getInterval(),
                         getTitlesWidget: (value, meta) => SideTitleWidget(
@@ -260,6 +260,8 @@ class GlucoseChart extends StatelessWidget {
         ? 24
         : readings.first.chartLabel == "daily"
         ? 7
+        : readings.first.chartLabel == "all"
+        ? 100
         : 30;
   }
 
@@ -268,6 +270,8 @@ class GlucoseChart extends StatelessWidget {
         ? "Today"
         : readings.first.chartLabel == "daily"
         ? "Last 7 Days"
+        : readings.first.chartLabel == "all"
+        ? "All Time"
         : "Last Month";
   }
 
@@ -276,6 +280,8 @@ class GlucoseChart extends StatelessWidget {
         ? 2
         : readings.first.chartLabel == "daily"
         ? 1
+        : readings.first.chartLabel == "all"
+        ? 10
         : 4;
   }
 
@@ -284,7 +290,7 @@ class GlucoseChart extends StatelessWidget {
         ? 2
         : readings.first.chartLabel == "daily"
         ? 1.2
-        : 1.6;
+        : 1.6; // same for monthly and all
   }
 
   dynamic _getBottomTitle(double value) {
@@ -295,6 +301,9 @@ class GlucoseChart extends StatelessWidget {
         break;
       case "daily":
         result = days[(value > 0 ? value - 1 : 0).toInt()];
+        break;
+      case "all":
+        result = "";
         break;
       default:
         result = value.toInt();

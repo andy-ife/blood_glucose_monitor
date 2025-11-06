@@ -19,6 +19,12 @@ class GlucoseDataService {
   Stream<List<Reading>> get monthly =>
       _stream.map((data) => _groupByWeek(data, weeks: 4));
 
+  Stream<List<Reading>> get all => _stream.map(
+    (data) => data
+        .map((d) => d.copyWith(chartLabel: "all", xAxis: data.indexOf(d)))
+        .toList(),
+  );
+
   Stream<List<Reading>> recent(Duration duration) {
     return _stream.map(
       (data) => data

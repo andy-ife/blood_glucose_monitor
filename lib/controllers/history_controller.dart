@@ -37,6 +37,9 @@ class HistoryController extends ChangeNotifier {
         case 'Last Month':
           targetStream = _service.monthly;
           break;
+        case 'All':
+          targetStream = _service.all;
+          break;
         default:
           print('Invalid stream index: $streamIndex');
           return;
