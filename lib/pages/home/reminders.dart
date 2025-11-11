@@ -113,13 +113,13 @@ class RemindersPage extends StatelessWidget {
                                   ),
                                   trailing: GestureDetector(
                                     onTap: () => showDialog(
-                                      context: context,
-                                      builder: (_) => AlertDialog(
+                                      context: ctx,
+                                      builder: (dcontext) => AlertDialog(
                                         content: Text('Delete this reminder?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () async {
-                                              Navigator.pop(context);
+                                              Navigator.pop(dcontext);
                                               await controller.deleteReminder(
                                                 reminders[i].id,
                                               );
@@ -128,7 +128,7 @@ class RemindersPage extends StatelessWidget {
                                           ),
                                           TextButton(
                                             onPressed: () async {
-                                              Navigator.pop(context);
+                                              Navigator.pop(dcontext);
                                             },
                                             child: Text('No'),
                                           ),
