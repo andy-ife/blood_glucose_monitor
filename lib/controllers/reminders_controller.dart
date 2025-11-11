@@ -2,16 +2,19 @@ import 'dart:io';
 
 import 'package:alarm/alarm.dart';
 import 'package:blood_glucose_monitor/models/reminder.dart';
+import 'package:blood_glucose_monitor/services/notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class RemindersController extends ChangeNotifier {
   late final FirebaseFirestore _firestore;
+  late final NotificationService _service;
   late RemindersState state;
 
   RemindersController()
     : _firestore = FirebaseFirestore.instance,
+      _service = NotificationService(),
       state = RemindersState(remindersStream: Stream.empty()) {
     fetchRemindersStream();
   }
