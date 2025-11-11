@@ -58,7 +58,7 @@
         android:name="com.dexterous.flutterlocalnotifications.ForegroundService"
         android:exported="false"
         android:stopWithTask="false"
-        android:foregroundServiceType="specialUse">
+        android:foregroundServiceType="specialUse"/>
 
     </application>
     <!-- Required to query activities that can process text, see:
