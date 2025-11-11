@@ -32,7 +32,6 @@ class NotificationService {
     required List<int> frequency,
     DateTime? endDate,
     String? qrCode,
-    required int soundId,
   }) {
     final payload = {
       "name": patientName,
@@ -51,7 +50,6 @@ class NotificationService {
       id,
       "Hi $patientName It's Time",
       "To take $dosage $unit of $medicineName",
-      soundId, // Recall 0 is the default sound
       nextReminder,
       endDate,
       notificationTimes,
@@ -66,7 +64,6 @@ class NotificationService {
     int id,
     String title,
     String body,
-    int soundId,
     DateTime scheduleTime,
     DateTime? endDate,
     List<String> notificationTimes, {
@@ -76,7 +73,7 @@ class NotificationService {
   }) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-          'TMR CHANNEL${soundId}',
+          'TMR CHANNEL$id',
           'TMR PATIENT CHANNEL',
           channelDescription:
               'Receive notifications on your medication schedule',

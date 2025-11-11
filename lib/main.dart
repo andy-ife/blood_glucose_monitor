@@ -1,4 +1,3 @@
-import 'package:alarm/alarm.dart';
 import 'package:blood_glucose_monitor/controllers/auth_controller.dart';
 import 'package:blood_glucose_monitor/controllers/dashboard_controller.dart';
 import 'package:blood_glucose_monitor/controllers/history_controller.dart';
@@ -15,8 +14,6 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  await Alarm.init();
 
   runApp(
     MultiProvider(

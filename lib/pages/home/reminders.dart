@@ -32,7 +32,7 @@ class RemindersPage extends StatelessWidget {
                 listen: false,
               ).addReminder(
                 Reminder(
-                  id: Random().nextInt(1000000),
+                  id: Random().nextInt(1000),
                   userId: FirebaseAuth.instance.currentUser!.uid,
                   description: description,
                   time: time,

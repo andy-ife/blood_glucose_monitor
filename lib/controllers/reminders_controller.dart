@@ -1,20 +1,20 @@
-import 'dart:io';
-
-import 'package:alarm/alarm.dart';
+import 'package:blood_glucose_monitor/controllers/chat_controller.dart';
 import 'package:blood_glucose_monitor/models/reminder.dart';
+import 'package:blood_glucose_monitor/services/auth_service.dart';
 import 'package:blood_glucose_monitor/services/notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class RemindersController extends ChangeNotifier {
   late final FirebaseFirestore _firestore;
-  late final NotificationService _service;
+  late final NotificationService _notificationService;
+  late final AuthService _authService;
   late RemindersState state;
 
   RemindersController()
     : _firestore = FirebaseFirestore.instance,
-      _service = NotificationService(),
+      _notificationService = NotificationService(),
+      _authService = AuthService(),
       state = RemindersState(remindersStream: Stream.empty()) {
     fetchRemindersStream();
   }
@@ -35,16 +35,31 @@ class RemindersController extends ChangeNotifier {
   }
 
   Future<void> addReminder(Reminder reminder) async {
-    if (state.isAddingReminder) return;
+    try {
+      if (state.isAddingReminder) return;
 
-    _checkAndroidScheduleExactAlarmPermission();
+      await _notificationService.requestNotificationPermissions();
 
-    state = state.copyWith(isAddingReminder: true);
+      state = state.copyWith(isAddingReminder: true);
 
-    await _firestore.collection('reminders').add(reminder.toJson());
-    await _addAlarm(reminder);
+      await _firestore.collection('reminders').add(reminder.toJson());
+      _notificationService.scheduleNextReminder(
+        id: reminder.id,
+        patientName: _authService.user!.username,
+        patientId: _authService.user!.id,
+        doctorId: DOCTOR_ID,
+        dosage: "1",
+        unit: "Unit",
+        medicineName: "Glucose Test",
+        nextReminder: reminder.time!,
+        notificationTimes: [],
+        frequency: [1],
+      );
 
-    state = state.copyWith(isAddingReminder: false);
+      state = state.copyWith(isAddingReminder: false);
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> deleteReminder(int id) async {
@@ -57,40 +72,8 @@ class RemindersController extends ChangeNotifier {
       await doc.reference.delete();
     }
 
-    await Alarm.stop(id);
+    _notificationService.cancelNotification(id);
   }
-}
-
-Future<void> _checkAndroidScheduleExactAlarmPermission() async {
-  final status = await Permission.scheduleExactAlarm.status;
-  if (status.isDenied) {
-    await Permission.scheduleExactAlarm.request();
-  }
-}
-
-Future<void> _addAlarm(Reminder reminder) async {
-  final alarmSettings = AlarmSettings(
-    id: reminder.id,
-    dateTime: reminder.time!,
-    assetAudioPath: 'assets/alarm.wav',
-    loopAudio: true,
-    vibrate: true,
-    warningNotificationOnKill: Platform.isIOS,
-    androidFullScreenIntent: true,
-    volumeSettings: VolumeSettings.fade(
-      volume: 0.8,
-      fadeDuration: Duration(seconds: 5),
-      volumeEnforced: true,
-    ),
-    notificationSettings: NotificationSettings(
-      title: 'Blood Glucose Monitor',
-      body: reminder.description,
-      stopButton: 'Dismiss',
-      iconColor: Color(0xff862778),
-    ),
-  );
-
-  await Alarm.set(alarmSettings: alarmSettings);
 }
 
 class RemindersState {
