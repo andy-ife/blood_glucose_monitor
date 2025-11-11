@@ -4,6 +4,7 @@ import 'package:blood_glucose_monitor/controllers/reminders_controller.dart';
 import 'package:blood_glucose_monitor/models/reminder.dart';
 import 'package:blood_glucose_monitor/utils/helpers.dart';
 import 'package:blood_glucose_monitor/widgets/add_reminder.dart';
+import 'package:blood_glucose_monitor/widgets/delete_reminder_dialog.dart';
 import 'package:blood_glucose_monitor/widgets/error_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -113,26 +114,9 @@ class RemindersPage extends StatelessWidget {
                                   ),
                                   trailing: GestureDetector(
                                     onTap: () => showDialog(
-                                      context: context,
-                                      builder: (_) => AlertDialog(
-                                        content: Text('Delete this reminder?'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () async {
-                                              Navigator.pop(context);
-                                              await controller.deleteReminder(
-                                                reminders[i].id,
-                                              );
-                                            },
-                                            child: Text('Yes'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () async {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text('No'),
-                                          ),
-                                        ],
+                                      context: ctx,
+                                      builder: (_) => DeleteReminderDialog(
+                                        reminder: reminders[i],
                                       ),
                                     ),
                                     child: Icon(Icons.delete_outline),

@@ -1,8 +1,10 @@
+import 'package:blood_glucose_monitor/controllers/dashboard_controller.dart';
 import 'package:blood_glucose_monitor/navigation/routes.dart';
 import 'package:blood_glucose_monitor/theme/colors.dart';
 import 'package:blood_glucose_monitor/widgets/button_group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class TestsPage extends StatelessWidget {
   const TestsPage({super.key});
@@ -10,6 +12,8 @@ class TestsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final controller = context.watch<DashboardController>();
+    final state = controller.state;
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(

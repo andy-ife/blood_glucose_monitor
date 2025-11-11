@@ -4,6 +4,7 @@ import 'package:blood_glucose_monitor/services/auth_service.dart';
 import 'package:blood_glucose_monitor/services/notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class RemindersController extends ChangeNotifier {
   late final FirebaseFirestore _firestore;
@@ -39,6 +40,7 @@ class RemindersController extends ChangeNotifier {
       if (state.isAddingReminder) return;
 
       await _notificationService.requestNotificationPermissions();
+      await Permission.ignoreBatteryOptimizations.request();
 
       state = state.copyWith(isAddingReminder: true);
 
@@ -52,8 +54,13 @@ class RemindersController extends ChangeNotifier {
         unit: "Unit",
         medicineName: "Glucose Test",
         nextReminder: reminder.time!,
-        notificationTimes: [],
-        frequency: [1],
+        endDate: null,
+        notificationTimes: [
+          _notificationService.formatTimeOfDay(
+            TimeOfDay.fromDateTime(reminder.time!),
+          ),
+        ],
+        frequency: [0, 1, 2, 3, 4, 5, 6],
       );
 
       state = state.copyWith(isAddingReminder: false);

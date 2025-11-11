@@ -31,7 +31,6 @@ class NotificationService {
     required List<String> notificationTimes,
     required List<int> frequency,
     DateTime? endDate,
-    String? qrCode,
   }) {
     final payload = {
       "name": patientName,
@@ -43,18 +42,14 @@ class NotificationService {
       "expectedTime":
           "${formatTimeOfDay(TimeOfDay(hour: nextReminder.hour, minute: nextReminder.minute))} on ${formatDate(nextReminder)}",
     };
-    if (qrCode != null) {
-      payload['qrCode'] = qrCode;
-    }
     _scheduleNotification(
       id,
       "Hi $patientName It's Time",
-      "To take $dosage $unit of $medicineName",
+      "To take Your Glucose Test",
       nextReminder,
       endDate,
       notificationTimes,
       daysOfTheWeek: frequency,
-      qrCode: qrCode,
       payload: jsonEncode(payload),
     );
   }
@@ -73,10 +68,9 @@ class NotificationService {
   }) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-          'TMR CHANNEL$id',
-          'TMR PATIENT CHANNEL',
-          channelDescription:
-              'Receive notifications on your medication schedule',
+          'BGM CHANNEL$id',
+          'BGM PATIENT CHANNEL',
+          channelDescription: 'Remember to take your glucose medication',
           importance: Importance.max,
           priority: Priority.high,
           playSound: true,
@@ -106,7 +100,7 @@ class NotificationService {
           actions: [
             const AndroidNotificationAction(
               takenActionId,
-              'TAKEN',
+              'TEST TAKEN',
               cancelNotification: true,
             ),
             // const AndroidNotificationAction(
