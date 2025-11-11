@@ -3,21 +3,18 @@ import 'dart:io';
 import 'package:alarm/alarm.dart';
 import 'package:blood_glucose_monitor/models/reminder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class RemindersController extends ChangeNotifier {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late final FirebaseFirestore _firestore;
+  late RemindersState state;
 
-  RemindersController() {
+  RemindersController()
+    : _firestore = FirebaseFirestore.instance,
+      state = RemindersState(remindersStream: Stream.empty()) {
     fetchRemindersStream();
   }
-
-  RemindersState state = RemindersState(
-    currentUser: FirebaseAuth.instance.currentUser!,
-    remindersStream: Stream.empty(),
-  );
 
   Future<void> fetchRemindersStream() async {
     if (state.isFetchingReminders) return;
@@ -94,14 +91,12 @@ Future<void> _addAlarm(Reminder reminder) async {
 }
 
 class RemindersState {
-  final User currentUser;
   final Stream<QuerySnapshot> remindersStream;
   final bool hasErrorFetchingReminders;
   final bool isFetchingReminders;
   final bool isAddingReminder;
 
   const RemindersState({
-    required this.currentUser,
     required this.remindersStream,
     this.hasErrorFetchingReminders = false,
     this.isFetchingReminders = false,
@@ -109,14 +104,12 @@ class RemindersState {
   });
 
   RemindersState copyWith({
-    User? currentUser,
     Stream<QuerySnapshot>? remindersStream,
     bool? hasErrorFetchingReminders,
     bool? isFetchingReminders,
     bool? isAddingReminder,
   }) {
     return RemindersState(
-      currentUser: currentUser ?? this.currentUser,
       remindersStream: remindersStream ?? this.remindersStream,
       hasErrorFetchingReminders:
           hasErrorFetchingReminders ?? this.hasErrorFetchingReminders,

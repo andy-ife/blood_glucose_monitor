@@ -1,4 +1,4 @@
-import 'package:blood_glucose_monitor/controllers/auth_controller.dart';
+import 'package:blood_glucose_monitor/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,9 +14,9 @@ class ProfileSettingsDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              Provider.of<AuthController>(context, listen: false).signOut();
+              await Provider.of<AuthService>(context, listen: false).signOut();
             },
             child: Text('Sign out'),
           ),

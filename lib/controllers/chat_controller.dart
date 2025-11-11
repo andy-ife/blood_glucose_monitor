@@ -1,21 +1,24 @@
 import 'package:blood_glucose_monitor/models/message.dart';
+import 'package:blood_glucose_monitor/services/auth_service.dart';
 import 'package:blood_glucose_monitor/utils/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-final DOCTOR_ID = 'jmWzzl6ZgzNA3EA4Gb5ijOwdbT83';
+final DOCTOR_ID = '8A2WhOOv4qYOetytpepzTWs6FmJ3'; // from firebase
 
 class ChatController extends ChangeNotifier {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late final FirebaseFirestore _firestore;
+  late final AuthService _auth;
 
   ChatState state = ChatState(
     messageStream: Stream.empty(),
     currentUser: FirebaseAuth.instance.currentUser!,
   );
 
-  ChatController() {
+  ChatController()
+    : _firestore = FirebaseFirestore.instance,
+      _auth = AuthService() {
     fetchMessageStream();
   }
 
@@ -30,7 +33,7 @@ class ChatController extends ChangeNotifier {
       notifyListeners();
 
       final chatRoomId = constructChatRoomId(
-        senderId: _auth.currentUser!.uid,
+        senderId: _auth.user.id,
         receiverId: DOCTOR_ID,
       );
 
@@ -62,8 +65,8 @@ class ChatController extends ChangeNotifier {
   Future<void> sendMessage(String message) async {
     try {
       final newMessage = Message(
-        senderId: _auth.currentUser!.uid,
-        senderEmail: _auth.currentUser!.email!,
+        senderId: _auth.user.id,
+        senderEmail: _auth.user.email,
         receiverId: DOCTOR_ID, // patients can only chat with Doc Leo
         message: message,
         timestamp: Timestamp.now(),
@@ -74,7 +77,7 @@ class ChatController extends ChangeNotifier {
       notifyListeners();
 
       final chatRoomId = constructChatRoomId(
-        senderId: _auth.currentUser!.uid,
+        senderId: _auth.user.id,
         receiverId: DOCTOR_ID,
       );
 

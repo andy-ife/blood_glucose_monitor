@@ -5,16 +5,17 @@ import 'package:blood_glucose_monitor/services/glucose_data_service.dart';
 import 'package:flutter/material.dart';
 
 class HistoryController extends ChangeNotifier {
-  final _service = GlucoseDataService();
-
-  HistoryState state = HistoryState();
-
-  final StreamController<String> _streamController = StreamController<String>();
+  late final GlucoseDataService _service;
+  late final StreamController<String> _streamController;
+  late HistoryState state;
   StreamSubscription? _subscription;
 
   final tabs = ['Today', 'Last 7 Days', 'Last Month', 'All'];
 
-  HistoryController() {
+  HistoryController()
+    : _service = GlucoseDataService(),
+      _streamController = StreamController<String>(),
+      state = HistoryState() {
     init();
     switchTimeframe('Today');
   }

@@ -3,18 +3,16 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:blood_glucose_monitor/models/reading.dart';
 import 'package:blood_glucose_monitor/services/glucose_data_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DashboardController extends ChangeNotifier {
-  final _service = GlucoseDataService();
+  late final GlucoseDataService _service;
+  late DashboardState state;
   StreamSubscription? _stream;
 
-  DashboardState state = DashboardState(
-    currentUser: FirebaseAuth.instance.currentUser!,
-  );
-
-  DashboardController() {
+  DashboardController()
+    : _service = GlucoseDataService(),
+      state = DashboardState() {
     init();
   }
 
@@ -64,7 +62,6 @@ class DashboardController extends ChangeNotifier {
 class DashboardState {
   final bool loading;
   final String error;
-  final User currentUser;
   final Reading? currentTest;
   final List<Reading> todayTests;
   final List<Reading> recentTests;
@@ -72,7 +69,6 @@ class DashboardState {
   const DashboardState({
     this.loading = false,
     this.error = '',
-    required this.currentUser,
     this.currentTest,
     this.todayTests = const [],
     this.recentTests = const [],
@@ -80,13 +76,11 @@ class DashboardState {
 
   DashboardState copyWith({
     bool? loading,
-    User? currentUser,
     String? error,
     Reading? currentTest,
     List<Reading>? todayTests,
     List<Reading>? recentTests,
   }) => DashboardState(
-    currentUser: currentUser ?? this.currentUser,
     loading: loading ?? this.loading,
     currentTest: currentTest ?? this.currentTest,
     recentTests: recentTests ?? this.recentTests,

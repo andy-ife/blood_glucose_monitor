@@ -1,5 +1,6 @@
 import 'package:blood_glucose_monitor/controllers/dashboard_controller.dart';
 import 'package:blood_glucose_monitor/pages/home/tests.dart';
+import 'package:blood_glucose_monitor/services/auth_service.dart';
 import 'package:blood_glucose_monitor/theme/colors.dart';
 import 'package:blood_glucose_monitor/widgets/current_test_card.dart';
 import 'package:blood_glucose_monitor/widgets/glucose_chart.dart';
@@ -17,6 +18,7 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final constraints = MediaQuery.of(context).size;
+    final currentUser = context.watch<AuthService>().user;
     final controller = context.watch<DashboardController>();
     final state = controller.state;
 
@@ -49,7 +51,7 @@ class DashboardPage extends StatelessWidget {
                 children: [
                   TextSpan(text: 'Hello, ', style: theme.textTheme.bodyLarge),
                   TextSpan(
-                    text: state.currentUser.displayName,
+                    text: currentUser.username,
                     style: theme.textTheme.titleMedium,
                   ),
                 ],

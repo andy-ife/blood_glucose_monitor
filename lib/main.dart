@@ -5,6 +5,7 @@ import 'package:blood_glucose_monitor/controllers/history_controller.dart';
 import 'package:blood_glucose_monitor/controllers/reminders_controller.dart';
 import 'package:blood_glucose_monitor/firebase_options.dart';
 import 'package:blood_glucose_monitor/pages/auth/auth_gate.dart';
+import 'package:blood_glucose_monitor/services/auth_service.dart';
 import 'package:blood_glucose_monitor/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,10 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        // services
+        ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
+
+        // viewmodels
         ChangeNotifierProvider<AuthController>(create: (_) => AuthController()),
         ChangeNotifierProvider<RemindersController>(
           create: (_) => RemindersController(),

@@ -1,47 +1,36 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:blood_glucose_monitor/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class AuthController extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late final AuthService _service;
 
-  AuthState state = AuthState();
+  AuthState state;
 
-  Future<UserCredential?> signIn(String email, String password) async {
+  AuthController() : state = AuthState(), _service = AuthService();
+
+  Future signIn(String email, String password) async {
     if (state.isLoading) return null;
 
     try {
       state = state.copyWith(isLoading: true, hasError: false);
       notifyListeners();
-
-      final creds = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return creds;
-    } on FirebaseAuthException catch (e) {
+      await _service.signIn(email, password);
+    } catch (e) {
       state = state.copyWith(
         hasError: true,
         isLoading: false,
         message: e.toString(),
       );
       notifyListeners();
-
       // give snackbar time to display
       await Future.delayed(Duration(milliseconds: 50));
     } finally {
       state = state.copyWith(hasError: false, isLoading: false);
       notifyListeners();
     }
-    return null;
   }
 
-  Future<void> signOut() async {
-    await _auth.signOut();
-  }
-
-  Future<UserCredential?> signUp({
+  Future signUp({
     required String email,
     required String username,
     required String password,
@@ -52,39 +41,24 @@ class AuthController extends ChangeNotifier {
     try {
       state = state.copyWith(isLoading: true, hasError: false);
       notifyListeners();
-
-      final creds = await _auth.createUserWithEmailAndPassword(
+      await _service.signUp(
         email: email,
+        username: username,
         password: password,
       );
-
-      await creds.user!.updateDisplayName(username);
-      await creds.user!.updatePhotoURL(profilePhoto);
-      await Future.delayed(Duration(seconds: 5), () => creds.user!.reload());
-
-      await _firestore.collection("users").add({
-        "id": creds.user!.uid,
-        "username": username,
-        "profilePhoto": profilePhoto,
-        "email": email,
-      });
-
-      return creds;
-    } on Exception catch (e) {
+    } catch (e) {
       state = state.copyWith(
         hasError: true,
         isLoading: false,
         message: e.toString(),
       );
       notifyListeners();
-
       // give snackbar time to display
       await Future.delayed(Duration(milliseconds: 50));
     } finally {
       state = state.copyWith(hasError: false, isLoading: false);
       notifyListeners();
     }
-    return null;
   }
 }
 
