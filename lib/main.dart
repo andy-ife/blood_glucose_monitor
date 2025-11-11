@@ -4,7 +4,8 @@ import 'package:blood_glucose_monitor/controllers/dashboard_controller.dart';
 import 'package:blood_glucose_monitor/controllers/history_controller.dart';
 import 'package:blood_glucose_monitor/controllers/reminders_controller.dart';
 import 'package:blood_glucose_monitor/firebase_options.dart';
-import 'package:blood_glucose_monitor/pages/auth/auth_gate.dart';
+import 'package:blood_glucose_monitor/navigation/auth_flow.dart';
+import 'package:blood_glucose_monitor/navigation/home_flow.dart';
 import 'package:blood_glucose_monitor/services/auth_service.dart';
 import 'package:blood_glucose_monitor/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,11 +46,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<AuthService>().user;
     return MaterialApp(
       title: 'Blood Glucose Monitor',
       theme: AppTheme.light,
       themeMode: ThemeMode.light,
-      home: AuthGate(),
+      home: user == null ? AuthFlow() : HomeFlow(),
       debugShowCheckedModeBanner: false,
     );
   }

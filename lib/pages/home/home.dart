@@ -1,10 +1,8 @@
-import 'package:blood_glucose_monitor/controllers/chat_controller.dart';
-import 'package:blood_glucose_monitor/pages/home/chat.dart';
+import 'package:blood_glucose_monitor/navigation/routes.dart';
 import 'package:blood_glucose_monitor/pages/home/dashboard.dart';
 import 'package:blood_glucose_monitor/pages/home/history.dart';
 import 'package:blood_glucose_monitor/pages/home/reminders.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,14 +23,7 @@ class _HomePageState extends State<HomePage> {
           ? FloatingActionButton(
               heroTag: 'chat',
               foregroundColor: theme.colorScheme.onPrimary,
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => ChangeNotifierProvider(
-                    create: (_) => ChatController(),
-                    child: ChatPage(),
-                  ),
-                ),
-              ),
+              onPressed: () => Navigator.of(context).pushNamed(Routes.chat),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

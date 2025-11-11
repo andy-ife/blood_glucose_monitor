@@ -7,12 +7,24 @@ class AuthService extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  UserProfile user = UserProfile(); // observable
+  UserProfile? user; // observable
 
   // singleton
   static final AuthService _authService = AuthService._internal();
   factory AuthService() => _authService;
-  AuthService._internal();
+  AuthService._internal() {
+    final firebaseUser = FirebaseAuth.instance.currentUser;
+
+    if (firebaseUser != null) {
+      user = UserProfile(
+        id: firebaseUser.uid,
+        email: firebaseUser.email ?? "",
+        profilePhoto: firebaseUser.photoURL ?? "",
+        username: firebaseUser.displayName ?? "",
+      );
+    }
+    notifyListeners();
+  }
 
   Future signIn(String email, String password) async {
     try {
@@ -22,14 +34,12 @@ class AuthService extends ChangeNotifier {
       );
       user = UserProfile(
         email: email,
-        username: creds.user!.displayName!,
+        username: creds.user?.displayName ?? "_glucoseboy",
         id: creds.user!.uid,
-        profilePhoto: creds.user!.photoURL!,
+        profilePhoto: creds.user?.photoURL ?? "nil",
       );
       notifyListeners();
     } on Exception {
-      user = UserProfile();
-      notifyListeners();
       rethrow;
     }
   }
@@ -37,6 +47,8 @@ class AuthService extends ChangeNotifier {
   Future signOut() async {
     try {
       await _auth.signOut();
+      user = null;
+      notifyListeners();
     } on Exception {
       rethrow;
     }
@@ -67,14 +79,12 @@ class AuthService extends ChangeNotifier {
 
       user = UserProfile(
         email: email,
-        username: creds.user!.displayName!,
+        username: username,
         id: creds.user!.uid,
-        profilePhoto: creds.user!.photoURL!,
+        profilePhoto: profilePhoto,
       );
       notifyListeners();
     } on Exception {
-      user = UserProfile();
-      notifyListeners();
       rethrow;
     }
   }

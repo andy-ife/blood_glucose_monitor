@@ -1,5 +1,4 @@
-import 'package:blood_glucose_monitor/pages/auth/account_details.dart';
-import 'package:blood_glucose_monitor/pages/auth/signin.dart';
+import 'package:blood_glucose_monitor/navigation/routes.dart';
 import 'package:flutter/material.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -67,9 +66,9 @@ class _SignUpFormState extends State<SignUpForm> {
                           ),
                           const SizedBox(height: 40),
                           GestureDetector(
-                            onTap: () => Navigator.pushReplacement(
+                            onTap: () => Navigator.pushReplacementNamed(
                               context,
-                              MaterialPageRoute(builder: (_) => SignInForm()),
+                              Routes.signIn,
                             ),
                             child: Center(
                               child: Text.rich(
@@ -113,12 +112,9 @@ class _SignUpFormState extends State<SignUpForm> {
                     child: TextButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => AccountDetailsForm(
-                                email: _emailController.text.trim(),
-                              ),
-                            ),
+                          Navigator.of(context).pushNamed(
+                            Routes.accountDetails,
+                            arguments: _emailController.text.trim(),
                           );
                         }
                       },

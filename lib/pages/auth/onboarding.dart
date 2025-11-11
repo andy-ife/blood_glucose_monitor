@@ -1,5 +1,4 @@
-import 'package:blood_glucose_monitor/pages/auth/signin.dart';
-import 'package:blood_glucose_monitor/pages/auth/signup.dart';
+import 'package:blood_glucose_monitor/navigation/routes.dart';
 import 'package:blood_glucose_monitor/theme/styles.dart';
 import 'package:blood_glucose_monitor/widgets/gradient_background.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,10 @@ class OnboardingPage extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(backgroundColor: Colors.transparent),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+      ),
       body: GradientBackground(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -64,9 +66,7 @@ class OnboardingPage extends StatelessWidget {
                           width: double.infinity,
                           child: TextButton(
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => SignInForm()),
-                              );
+                              Navigator.of(context).pushNamed(Routes.signIn);
                             },
                             style: AppButtonStylesLight.filled.copyWith(
                               backgroundColor: WidgetStateProperty.all(
@@ -91,9 +91,7 @@ class OnboardingPage extends StatelessWidget {
                           width: double.infinity,
                           child: TextButton(
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => SignUpForm()),
-                              );
+                              Navigator.of(context).pushNamed(Routes.signUp);
                             },
                             style: AppButtonStylesLight.text.copyWith(
                               foregroundColor: WidgetStateProperty.all(

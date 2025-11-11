@@ -1,5 +1,5 @@
 import 'package:blood_glucose_monitor/controllers/auth_controller.dart';
-import 'package:blood_glucose_monitor/pages/auth/signup.dart';
+import 'package:blood_glucose_monitor/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -117,9 +117,9 @@ class _SignInFormState extends State<SignInForm> {
                           ),
                           const SizedBox(height: 40),
                           GestureDetector(
-                            onTap: () => Navigator.pushReplacement(
+                            onTap: () => Navigator.pushReplacementNamed(
                               context,
-                              MaterialPageRoute(builder: (_) => SignUpForm()),
+                              Routes.signUp,
                             ),
                             child: Center(
                               child: Text.rich(

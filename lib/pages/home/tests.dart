@@ -1,4 +1,4 @@
-import 'package:blood_glucose_monitor/pages/home/chat.dart';
+import 'package:blood_glucose_monitor/navigation/routes.dart';
 import 'package:blood_glucose_monitor/theme/colors.dart';
 import 'package:blood_glucose_monitor/widgets/button_group.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +14,7 @@ class TestsPage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         foregroundColor: theme.colorScheme.onPrimary,
-        onPressed: () => Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (_) => ChatPage())),
+        onPressed: () => Navigator.of(context).pushNamed(Routes.chat),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -1,5 +1,5 @@
 import 'package:blood_glucose_monitor/controllers/dashboard_controller.dart';
-import 'package:blood_glucose_monitor/pages/home/tests.dart';
+import 'package:blood_glucose_monitor/navigation/routes.dart';
 import 'package:blood_glucose_monitor/services/auth_service.dart';
 import 'package:blood_glucose_monitor/theme/colors.dart';
 import 'package:blood_glucose_monitor/widgets/current_test_card.dart';
@@ -31,7 +31,7 @@ class DashboardPage extends StatelessWidget {
           child: GestureDetector(
             onTap: () => showDialog(
               context: context,
-              builder: (context) => Dialog(child: ProfileSettingsDialog()),
+              builder: (context) => ProfileSettingsDialog(),
             ),
             child: CircleAvatar(
               backgroundColor: theme.colorScheme.surfaceVariant,
@@ -51,7 +51,7 @@ class DashboardPage extends StatelessWidget {
                 children: [
                   TextSpan(text: 'Hello, ', style: theme.textTheme.bodyLarge),
                   TextSpan(
-                    text: currentUser.username,
+                    text: currentUser?.username,
                     style: theme.textTheme.titleMedium,
                   ),
                 ],
@@ -108,10 +108,8 @@ class DashboardPage extends StatelessWidget {
                       children: [
                         Text('Your Tests', style: theme.textTheme.titleLarge),
                         InkWell(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => TestsPage()),
-                          ),
+                          onTap: () =>
+                              Navigator.pushNamed(context, Routes.tests),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 8.0,

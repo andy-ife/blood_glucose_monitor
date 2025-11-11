@@ -33,7 +33,7 @@ class ChatController extends ChangeNotifier {
       notifyListeners();
 
       final chatRoomId = constructChatRoomId(
-        senderId: _auth.user.id,
+        senderId: _auth.user!.id,
         receiverId: DOCTOR_ID,
       );
 
@@ -65,8 +65,8 @@ class ChatController extends ChangeNotifier {
   Future<void> sendMessage(String message) async {
     try {
       final newMessage = Message(
-        senderId: _auth.user.id,
-        senderEmail: _auth.user.email,
+        senderId: _auth.user!.id,
+        senderEmail: _auth.user!.email,
         receiverId: DOCTOR_ID, // patients can only chat with Doc Leo
         message: message,
         timestamp: Timestamp.now(),
@@ -77,7 +77,7 @@ class ChatController extends ChangeNotifier {
       notifyListeners();
 
       final chatRoomId = constructChatRoomId(
-        senderId: _auth.user.id,
+        senderId: _auth.user!.id,
         receiverId: DOCTOR_ID,
       );
 

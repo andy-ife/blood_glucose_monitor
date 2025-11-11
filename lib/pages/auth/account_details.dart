@@ -1,5 +1,4 @@
 import 'package:blood_glucose_monitor/controllers/auth_controller.dart';
-import 'package:blood_glucose_monitor/pages/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -161,18 +160,11 @@ class _AccountDetailsFormState extends State<AccountDetailsForm> {
                     child: TextButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          final creds = await _authController.signUp(
+                          await _authController.signUp(
                             email: widget.email,
                             username: _usernameController.text.trim(),
                             password: _passwordController.text.trim(),
                           );
-
-                          if (creds != null && context.mounted) {
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (_) => HomePage()),
-                              (route) => false,
-                            );
-                          }
                         }
                       },
                       child: _authState.isLoading

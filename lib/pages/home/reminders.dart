@@ -55,7 +55,10 @@ class RemindersPage extends StatelessWidget {
           ],
         ),
       ),
-      appBar: AppBar(title: Text('Reminders')),
+      appBar: AppBar(
+        title: Text('Reminders'),
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(

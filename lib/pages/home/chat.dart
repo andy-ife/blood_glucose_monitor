@@ -26,6 +26,15 @@ class _ChatPageState extends State<ChatPage> {
     _chatController = Provider.of<ChatController>(context, listen: false);
 
     _scrollController.addListener(_newMessageListener);
+
+    _chatController.addListener(() {
+      if (_chatController.state.hasErrorFetchingMessageStream ||
+          _chatController.state.hasErrorSendingMessage) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(_chatController.state.errorMessage)),
+        );
+      }
+    });
   }
 
   @override
