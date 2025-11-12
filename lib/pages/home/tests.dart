@@ -1,15 +1,32 @@
+import 'package:blood_glucose_monitor/controllers/dashboard_controller.dart';
 import 'package:blood_glucose_monitor/navigation/routes.dart';
-import 'package:blood_glucose_monitor/theme/colors.dart';
 import 'package:blood_glucose_monitor/widgets/button_group.dart';
+import 'package:blood_glucose_monitor/widgets/recent_test_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
-class TestsPage extends StatelessWidget {
+class TestsPage extends StatefulWidget {
   const TestsPage({super.key});
+
+  @override
+  State<TestsPage> createState() => _TestsPageState();
+}
+
+class _TestsPageState extends State<TestsPage> {
+  String _selectedPeriod = "Today";
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final state = context.watch<DashboardController>().state;
+
+    final readings = _selectedPeriod == "Today"
+        ? state.todayTests
+        : _selectedPeriod == "Last 7 Days"
+        ? state.weeklyTests
+        : _selectedPeriod == "Last Month"
+        ? state.monthlyTests
+        : state.allTests;
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -39,141 +56,44 @@ class TestsPage extends StatelessWidget {
               child: BGMButtonGroup(
                 values: const ['Today', 'Last 7 Days', 'Last Month', 'All'],
                 onSelectionChange: (selectedValues) {
-                  // Handle selection change
-                  print('Selected: $selectedValues');
+                  setState(() => _selectedPeriod = selectedValues.first);
                 },
                 enableMultiSelection: false,
                 initialSelection: {'Today'},
               ),
             ),
 
-            // Test Results List
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              itemCount: 5, // Generate 5 example items
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12.0),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return Card(
-                        color: AppColors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: SizedBox(
-                          height:
-                              constraints.maxWidth *
-                              0.25, // Adjusted for responsive height
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8.0,
-                              horizontal: 16.0,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Yesterday',
-                                      style: theme.textTheme.bodyMedium!,
-                                    ),
-                                    Text(
-                                      '11:00',
-                                      style: theme.textTheme.bodyMedium!,
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Row(
-                                      spacing: 8.0,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text.rich(
-                                          TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: '152 ',
-                                                style:
-                                                    theme.textTheme.titleLarge,
-                                              ),
-                                              TextSpan(
-                                                text: 'mg/dL',
-                                                style: theme
-                                                    .textTheme
-                                                    .bodySmall!
-                                                    .copyWith(
-                                                      color: theme
-                                                          .colorScheme
-                                                          .onSurfaceVariant,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              16.0,
-                                            ),
-                                            color: theme.colorScheme.surface,
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(4.0),
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  height: 5.0,
-                                                  width: 5.0,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: AppColors.green,
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 3.0),
-                                                Text(
-                                                  'Good',
-                                                  style: theme
-                                                      .textTheme
-                                                      .labelSmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: AppColors.green,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SvgPicture.asset(
-                                      'assets/blood/blue-light.svg',
-                                      width: 28.0,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+            if (_selectedPeriod != "All")
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsetsGeometry.symmetric(
+                      vertical: 10,
+                      horizontal: 16,
+                    ),
+                    child: Text(
+                      "Note that these are the average of your readings",
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        color: Colors.grey,
+                      ),
+                    ),
                   ),
-                );
-              },
-            ),
+                ],
+              ),
+
+            ...[
+              for (var reading in readings)
+                Padding(
+                  padding: EdgeInsetsGeometry.symmetric(
+                    horizontal: 16.0,
+                    vertical: 2.0,
+                  ),
+                  child: RecentTestCard(
+                    reading: reading,
+                    showTime: _selectedPeriod == "All",
+                  ),
+                ),
+            ],
           ],
         ),
       ),

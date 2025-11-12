@@ -31,7 +31,7 @@ String timestampToString(Timestamp timestamp, {String? timezone}) {
   return formatter.format(dateTime);
 }
 
-String formatDateTimeToReadable(DateTime date) {
+String formatDateTimeToReadable(DateTime date, {bool showTime = true}) {
   final months = [
     'Jan',
     'Feb',
@@ -72,7 +72,9 @@ String formatDateTimeToReadable(DateTime date) {
     }
   }
 
-  return '$month $day$suffix  $hour:$minute$ampm';
+  return showTime
+      ? '$month $day$suffix  $hour:$minute$ampm'
+      : '$month $day$suffix';
 }
 
 GlucoseLevel getGlucoseLevel(double reading) {

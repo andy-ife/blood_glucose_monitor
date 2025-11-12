@@ -6,9 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RecentTestCard extends StatelessWidget {
-  const RecentTestCard({super.key, required this.reading});
+  const RecentTestCard({
+    super.key,
+    required this.reading,
+    this.showTime = true,
+  });
 
   final Reading reading;
+  final bool showTime;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,7 @@ class RecentTestCard extends StatelessWidget {
                 children: [
                   Text('Glucose', style: theme.textTheme.bodyMedium!),
                   Text(
-                    formatDateTimeToReadable(reading.time),
+                    formatDateTimeToReadable(reading.time, showTime: showTime),
                     style: theme.textTheme.bodyMedium!,
                   ),
                 ],
